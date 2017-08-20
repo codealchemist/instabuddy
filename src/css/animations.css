@@ -1,0 +1,54 @@
+@keyframes ripple1 {
+  0% {
+    width: 150px;
+    height: 150px;
+    left: -4px;
+    top: -4px;
+    opacity: 1;
+  }
+
+  50% {
+    width: 160px;
+    height: 160px;
+    left: -9px;
+    top: -9px;
+    opacity: 0;
+  }
+
+  100% {
+    width: 150px;
+    height: 150px;
+    left: -4px;
+    top: -4px;
+  }
+}
+
+@keyframes ripple2 {
+  0% {
+    width: 150px;
+    height: 150px;
+    border-width: 5px;
+    top: -5px;
+    left: -5px;
+    opacity: 1;
+  }
+
+  50% {
+    width: 160px;
+    height: 160px;
+    border-width: 10px;
+    top: -15px;
+    left: -15px;
+    opacity: 0;
+  }
+
+  100% {
+    width: 150px;
+    height: 150px;
+    border-width: 5px;
+    top: -5px;
+    left: -5px;
+    opacity: 1;
+  }
+}
+

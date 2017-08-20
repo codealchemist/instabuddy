@@ -86,6 +86,8 @@ class App {
   addButton (event) {
     event.stopPropagation()
     const name = prompt('Button name?')
+    if (!name || !name.trim()) return
+
     const id = (new Date()).getTime()
     const color = this.getRandomColor()
     this.$buttons.prependHtml(`
