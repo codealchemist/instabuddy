@@ -1,0 +1,65 @@
+body {
+  font: 18px arial;
+  background: black;
+}
+
+#buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn {
+  margin: 5px;
+  position: relative;
+  background: #eee;
+  color: black;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 1s;
+}
+
+.btn p {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 20px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.add {
+  font-size: 40px;
+}
+
+.add p {
+  height: 40px;
+}
+
+.empty {
+  opacity: 0.2;
+}
+
+.btn.recording {
+  background: red;
+  color: white;
+  border: 2px solid white;
+  opacity: 1;
+}
+
+.btn.playing {
+  border: 2px solid white;
+}
