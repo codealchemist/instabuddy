@@ -1,0 +1,37 @@
+{
+  "name": "instabuddy",
+  "version": "1.0.0",
+  "description": "Instant button generator.",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "standard-focus",
+    "start": "node server",
+    "mongo": "mongod -f mongodb.conf"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codealchemist/instabuddy.git"
+  },
+  "keywords": [
+    "instabuddy",
+    "audio",
+    "fun",
+    "button",
+    "generator"
+  ],
+  "author": "Alberto Miranda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codealchemist/instabuddy/issues"
+  },
+  "homepage": "https://github.com/codealchemist/instabuddy#readme",
+  "devDependencies": {
+    "standard-focus": "^1.1.2"
+  },
+  "dependencies": {
+    "binaryjs": "^0.2.1",
+    "ejs": "^2.5.7",
+    "mongojs": "^2.4.1",
+    "ws": "^3.1.0"
+  }
+}

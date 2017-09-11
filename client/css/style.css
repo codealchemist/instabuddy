@@ -11,6 +11,23 @@ body {
   align-content: flex-start;
 }
 
+.btn i {
+  display: none;
+  position: absolute;
+  background: #eee;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  bottom: 20px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  border: 1px solid white;
+  font-size: 10px;
+  text-align: center;
+  line-height: 21px;
+}
+
 .ellipsis {
   white-space: nowrap;
   overflow: hidden;
@@ -32,6 +49,10 @@ body {
 
 .btn:hover {
   border: 2px solid white;
+}
+
+.btn:hover i {
+  display: block;
 }
 
 .btn p {
