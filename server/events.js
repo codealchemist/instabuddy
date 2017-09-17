@@ -1,13 +1,9 @@
 const mongojs = require('mongojs')
-
-const localConnectionString = 'mongodb://localhost:27017/instabuddy'
-const connectionString = process.env.MONGODB_CONNECTION_STRING || localConnectionString
-const db = mongojs(connectionString)
-const channelsCollection = db.collection('channels')
+const channelModel = require('./models/channel')
 
 function getChannel ({broadcast, send, ws, message}) {
   const name = message.name
-  channelsCollection.find({name}, (err, data) => {
+  channelModel.get(name, (err, data) => {
     if (err) {
       console.error('MONGO ERR:', err)
       send(ws, {type: 'error', err})
