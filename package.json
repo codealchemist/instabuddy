@@ -6,7 +6,7 @@
   "scripts": {
     "test": "standard-focus",
     "start": "node server",
-    "mongo": "mongod -f mongodb.conf"
+    "mongo": "mongod -f mongo.conf"
   },
   "repository": {
     "type": "git",
