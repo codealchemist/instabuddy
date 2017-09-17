@@ -73,7 +73,7 @@ class El {
 
   html (value) {
     if (value === undefined) return this.$el.innerHTML;
-    
+
     this.$el.innerHTML = value
     return this
   }

@@ -5,7 +5,7 @@ const path = require('path')
 const channelModel = require('./models/channel')
 
 const binaryServer = BinaryServer({port: 9001})
-const audioPath = path.join(__dirname, '../client/audio')
+const audioPath = path.join(__dirname, '../audio')
 
 binaryServer.on('connection', function(client) {
   console.log('new binary connection')

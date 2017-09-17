@@ -8,15 +8,13 @@ const gulpif = require('gulp-if')
 const cleanCSS = require('gulp-clean-css')
 const pump = require('pump')
 const copy = require('gulp-copy')
-const bom = require('gulp-bom')
 
 const paths = {
-  js: './src/js',
-  html: './src/index.html',
-  css: './src/css',
-  images: './src/images',
-  audio: './src/audio',
-  fonts: './src/fonts',
+  src: './client',
+  js: './client/js',
+  html: './client/index.html',
+  css: './client/css',
+  audio: './client/audio',
   dist: './dist'
 }
 
@@ -27,14 +25,11 @@ gulp.task('clean', () => {
 gulp.task('copy', (cb) => {
   return pump([
     gulp.src([
-      `${paths.css}/*.css`,
-      `${paths.images}/*`,
-      `${paths.audio}/*.mp3`,
-      `${paths.fonts}/*`,
-      `${paths.js}/html5shiv.js`
+      `${paths.js}/binary.min.js`,
+      `${paths.src}/*`,
+      `!${paths.src}/*.html`
     ]),
-    gulpif('*.css', cleanCSS()),
-    copy(paths.dist),
+    copy(paths.dist, {prefix: 1}),
     gulp.dest(paths.dist)
   ])
 })
@@ -46,7 +41,6 @@ gulp.task('build', (cb) => {
     gulpif('*.js', babel()),
     gulpif('*.js', uglify()),
     gulpif('*.css', cleanCSS()),
-    bom(),
     gulp.dest(paths.dist)
   ], cb)
 })

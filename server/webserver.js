@@ -1,12 +1,22 @@
 const path = require('path')
 const express = require('express')
 
+const pathMap = {
+  prod: 'dist',
+  dev: 'client'
+}
+
 function start () {
   const app = express()
   const port = process.env.PORT || 3000
-  const staticPath = path.join(__dirname, '../client')
-  app.use(express.static(staticPath))
-  app.set('views', path.resolve('client'))
+  const env = process.env.ENV || 'dev'
+  const envPath = pathMap[env]
+  const staticPath = path.join(__dirname, `../${envPath}`)
+  const audioPath = path.join(__dirname, '../audio')
+
+  app.use('/', express.static(staticPath))
+  app.use('/audio', express.static(audioPath))
+  app.set('views', path.resolve(envPath))
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html')
 
