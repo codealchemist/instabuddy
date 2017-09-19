@@ -1,5 +1,4 @@
 const BinaryServer = require('binaryjs').BinaryServer
-const mongojs = require('mongojs')
 const fs = require('fs')
 const path = require('path')
 const channelModel = require('./models/channel')

@@ -32,9 +32,7 @@ class App {
   }
 
   connect (callback) {
-    this.serverUrl = 'ws://localhost:4000'
-    this.ws = new WebSocket(this.serverUrl)
-    this.ws.binaryType = 'arraybuffer'
+    this.ws = new WebSocket(config.wsUrl)
 
     this.ws.onopen = () => {
       log('WebSocket connected.')
@@ -52,7 +50,7 @@ class App {
     }
 
     // TEST BINARY CLIENT
-    this.client = new BinaryClient('ws://localhost:9001')
+    this.client = new BinaryClient(config.wsBinaryUrl)
   }
 
   send (message) {
@@ -97,17 +95,6 @@ class App {
     }, this.recordingTime)
   }
 
-  // Int32 to Int16
-  convertBuffer (buffer) {
-    var l = buffer.length;
-    var buf = new Int16Array(l)
-
-    while (l--) {
-      buf[l] = buffer[l]*0xFFFF;    //convert to 16 bit
-    }
-    return buf.buffer
-  }
-
   saveButton (button) {
     fetch(button.src).then((response) => {
       response
@@ -122,36 +109,6 @@ class App {
           const stream = this.client.createStream(meta)
           stream.write(buffer)
           stream.end()
-
-          // const data = Int16Array.from(buffer)
-
-          // this.send({
-          //   type: 'saveButton',
-          //   button,
-          //   audio: data,
-          //   channel: this.channel
-          // })
-          return
-
-
-          const audioContext = new AudioContext()
-          audioContext
-            .decodeAudioData(buffer)
-            .then((audioBuffer) => {
-              const data = audioBuffer.getChannelData(0)
-
-              const stream = this.client.createStream()
-              stream.write(data)
-              stream.end()
-
-              console.log('AUDIO DATA', data)
-              // this.send({
-              //   type: 'saveButton',
-              //   button,
-              //   audio: data,
-              //   channel: this.channel
-              // })
-            })
         })
     })
   }
@@ -161,7 +118,9 @@ class App {
     const $el = new El(`#btn-${id}`)
 
     $el.addClass('playing')
-    this.$audio.src = this.audioCollection[id].src
+    let src = this.audioCollection[id].src
+    if (src.match(/^(?!blob:)/)) src = config.audioServer + src
+    this.$audio.src = src
     this.$audio.play()
 
     setTimeout(() => {
@@ -181,7 +140,7 @@ class App {
   }
 
   onKey (code) {
-    log('key:', code)
+
   }
 
   getRandomColor () {

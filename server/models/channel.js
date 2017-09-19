@@ -1,13 +1,8 @@
-const mongojs = require('mongojs')
-
-const localConnectionString = 'mongodb://localhost:27017/instabuddy'
-const connectionString = process.env.MONGODB_CONNECTION_STRING || localConnectionString
-const db = mongojs(connectionString)
-const collection = db.collection('channels')
+const db = require('./__db')
 
 class Channel {
-  constructor (collection) {
-    this.collection = collection
+  constructor () {
+    this.collection = db.collection('channels')
   }
 
   list () {
@@ -39,5 +34,5 @@ class Channel {
   }
 }
 
-const channel = new Channel(collection)
+const channel = new Channel()
 module.exports = channel

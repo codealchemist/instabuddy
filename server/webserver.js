@@ -6,7 +6,7 @@ const pathMap = {
   dev: 'client'
 }
 
-function start () {
+function start (callback) {
   const app = express()
   const port = process.env.PORT || 3000
   const env = process.env.ENV || 'dev'
@@ -32,6 +32,7 @@ function start () {
 
   app.listen(port, () => {
     console.log(`INSTABUDDY server listening on http://localhost:${port}`)
+    if (typeof callback === 'function') callback(app)
   })
 }
 
