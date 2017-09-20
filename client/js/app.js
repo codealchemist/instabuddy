@@ -32,7 +32,10 @@ class App {
   }
 
   connect (callback) {
-    this.ws = new WebSocket(config.wsUrl)
+    let wsProto = 'ws'
+    if (location.protocol === 'https:') wsProto = 'wss'
+    this.ws = new WebSocket(`${wsProto}://${location.host}`)
+    this.ws.binaryType = 'arraybuffer'
 
     this.ws.onopen = () => {
       log('WebSocket connected.')
@@ -48,9 +51,6 @@ class App {
     this.ws.onerror = (event) => {
       log('ERROR:', event)
     }
-
-    // TEST BINARY CLIENT
-    this.client = new BinaryClient(config.wsBinaryUrl)
   }
 
   send (message) {
@@ -95,20 +95,26 @@ class App {
     }, this.recordingTime)
   }
 
+  sendBinary (buffer, {id, name, channel}) {
+    const xhr = new XMLHttpRequest
+    const url = `/binary/${channel}/${id}/${name}`
+    xhr.open('POST', url, true)
+    xhr.send(buffer)
+  }
+
   saveButton (button) {
     fetch(button.src).then((response) => {
       response
         .arrayBuffer()
         .then((buffer) => {
           console.log(buffer)
-          const meta = JSON.stringify({
+
+          const meta = {
             id: button.id,
             name: button.name,
             channel: this.channel
-          })
-          const stream = this.client.createStream(meta)
-          stream.write(buffer)
-          stream.end()
+          }
+          this.sendBinary(buffer, meta)
         })
     })
   }
@@ -119,7 +125,6 @@ class App {
 
     $el.addClass('playing')
     let src = this.audioCollection[id].src
-    if (src.match(/^(?!blob:)/)) src = config.audioServer + src
     this.$audio.src = src
     this.$audio.play()
 

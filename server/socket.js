@@ -1,21 +1,40 @@
+const http = require('http')
 const WebSocket = require('ws')
 const events = require('./events')
 
 let wss
+const port = process.env.PORT || 3000
 
-function start (callback) {
-  const socketPort = process.env.SOCKET_PORT || 4000
+function start (app, callback) {
+  if (app) return startWithApp(app, callback)
+
   wss = new WebSocket.Server({
     perMessageDeflate: false,
-    port: socketPort
-  }, () => {
-    console.log(`INSTABUDDY socket listening on http://localhost:${socketPort}`)
-    setEvents()
-    if (typeof callback === 'function') callback()
+    port
+  })
+
+  setEvents()
+}
+
+function startWithApp (app, callback) {
+  const server = http.createServer(app)
+  wss = new WebSocket.Server({
+    perMessageDeflate: false,
+    server
+  })
+
+  setEvents()
+
+  server.listen(port, () => {
+    console.log(`
+      WEB SERVER listening on port ${port}.
+      SOCKET attached.
+    `)
   })
 }
 
 function setEvents () {
+  console.log('set socket events')
   wss.on('connection', (ws) => {
     log('NEW client')
 
