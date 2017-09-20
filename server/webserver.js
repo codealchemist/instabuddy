@@ -29,6 +29,15 @@ function start (callback) {
     res.render('index')
   })
 
+  app.get('/channel/:id/reset', (req, res) => {
+    const id = req.params.id
+    console.log(`RESET CHANNEL '${id}'`)
+    channelModel.reset(id, () => {
+      console.log(`CHANNEL '${id}' RESET successfully.`)
+      res.redirect(`/channel/${id}`)
+    })
+  })
+
   app.post('/binary/:channel/:id/:name', (req, res) => {
     const {id, name, channel} = req.params
     console.log(`SAVE BINARY DATA: ${id}:${name} @ ${channel}`)
@@ -76,19 +85,6 @@ function saveBinary (req, data) {
       console.log('DB: Saved OK!', response)
     })
   }
-
-  // stream.pipe(fileWriter)
-
-  // stream.on('end', function() {
-  //   fileWriter.end()
-  //   console.log('SAVE BINARY: File written OK:', file)
-  //   data.src = `/audio/${data.channel}/${data.id}.webm`
-
-  //   // Save new button in db.
-  //   channelModel.addButton(data, (err, response) => {
-  //     console.log('DB: Saved OK!', response)
-  //   })
-  // })
 }
 
 module.exports = { start }
