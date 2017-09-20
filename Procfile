@@ -1,1 +1,1 @@
-web: gulp; ENV=prod npm start
+web: ENV=prod npm start
