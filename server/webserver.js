@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
+const mkdirp = require('mkdirp')
 const channelModel = require('./models/channel')
 
 const app = express()
@@ -63,20 +64,29 @@ function listen () {
 }
 
 function saveBinary (req, data) {
-  const file = `${audioPath}/${data.channel}/${data.id}.webm`
-  const fileWriter = fs.createWriteStream(file)
+  const filePath = `${audioPath}/${data.channel}`
+  const file = `${filePath}/${data.id}.webm`
 
-  var buffer = new Buffer('')
-  req.on('data', function(chunk) {
-      buffer = Buffer.concat([buffer, chunk])
-  })
-  req.on('end', function() {
-    fileWriter.write(buffer)
-    fileWriter.end()
-    console.log('SAVE BINARY: File written OK:', file)
+  // Ensure path exists.
+  mkdirp(filePath, (err) => {
+    if (err) {
+      console.log(`ERROR: UNABLE TO SAVE FILE: '${file}'`, err)
+      return
+    }
 
-    data.src = `/audio/${data.channel}/${data.id}.webm`
-    saveDb(data)
+    const fileWriter = fs.createWriteStream(file)
+    let buffer = new Buffer('')
+    req.on('data', function(chunk) {
+        buffer = Buffer.concat([buffer, chunk])
+    })
+    req.on('end', () => {
+      fileWriter.write(buffer)
+      fileWriter.end()
+      console.log('SAVE BINARY: File written OK:', file)
+
+      data.src = `/audio/${data.channel}/${data.id}.webm`
+      saveDb(data)
+    })
   })
 
   // Save new button in db.
