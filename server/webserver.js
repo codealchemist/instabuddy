@@ -3,6 +3,7 @@ const path = require('path')
 const express = require('express')
 const mkdirp = require('mkdirp')
 const channelModel = require('./models/channel')
+const storage = require('./storage')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -43,10 +44,9 @@ function start (callback) {
     const {id, name, channel} = req.params
     console.log(`SAVE BINARY DATA: ${id}:${name} @ ${channel}`)
 
-    // const body = req.body
-    // const buffer = new Buffer(body.toString('binary'), 'binary')
     const data = {id, name, channel}
-    saveBinary(req, data)
+    // saveBinary(req, data) // Save to disk.
+    upload(req, data)
   })
 
   app.use((req, res) => {
@@ -60,6 +60,29 @@ function start (callback) {
 function listen () {
   app.listen(port, () => {
     console.log(`INSTABUDDY server listening on http://localhost:${port}`)
+  })
+}
+
+function upload (req, data) {
+  bufferify(req, (buffer) => {
+    const id = `${data.channel}-${data.id}`
+    storage.upload({buffer, id}, (result) => {
+      console.log('STORAGE UPLOAD, result:', result)
+
+      // Add storage src.
+      data.src = result.secure_url
+      saveDb(data)
+    })
+  })
+}
+
+function bufferify (req, callback) {
+  let buffer = new Buffer('')
+  req.on('data', function(chunk) {
+    buffer = Buffer.concat([buffer, chunk])
+  })
+  req.on('end', () => {
+    callback(buffer)
   })
 }
 
@@ -88,13 +111,13 @@ function saveBinary (req, data) {
       saveDb(data)
     })
   })
+}
 
-  // Save new button in db.
-  function saveDb (data) {
-    channelModel.addButton(data, (err, response) => {
-      console.log('DB: Saved OK!', response)
-    })
-  }
+// Save new button in db.
+function saveDb (data) {
+  channelModel.addButton(data, (err, response) => {
+    console.log('DB: Saved OK!', response)
+  })
 }
 
 module.exports = { start }

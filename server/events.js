@@ -1,4 +1,3 @@
-const mongojs = require('mongojs')
 const channelModel = require('./models/channel')
 
 function getChannel ({broadcast, send, ws, message}) {
@@ -10,8 +9,9 @@ function getChannel ({broadcast, send, ws, message}) {
       return
     }
 
-    console.log(`CHANNEL '${name}':`, data[0])
-    send(ws, {type: 'channel', data: data[0]})
+    const channel = data[0]
+    console.log(`CHANNEL '${name}':`, channel)
+    send(ws, {type: 'channel', data: channel})
   })
 }
 

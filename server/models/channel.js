@@ -13,12 +13,9 @@ class Channel {
     this.collection.find({name}, callback)
   }
 
-  update (channel) {
-
-  }
-
-  create (channel) {
-
+  save (channel) {
+    if (!channel) return
+    this.collection.save(channel, callback)
   }
 
   reset (channel, callback) {
