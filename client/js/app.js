@@ -66,6 +66,7 @@ class App {
   onButtonClick (event) {
     // log('button clicked', event)
     const id = event.target.dataset.id
+    if (!id) return
     if (this.audioCollection[id].src) return this.play(id)
     this.record(id, event)
   }
