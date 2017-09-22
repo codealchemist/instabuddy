@@ -54,6 +54,11 @@ class El {
     return this
   }
 
+  remove () {
+    this.$el.parentNode.removeChild(this.$el)
+    return this
+  }
+
   setRandomBackground ({path = '', range = [0, 5], length = 3, ext = 'jpg'}) {
     const [min, max] = range
     const num = Math.round(Math.random() * (max - min) + min)

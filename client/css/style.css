@@ -12,20 +12,26 @@ body {
 }
 
 .btn i {
+  font-size: 16px;
+}
+
+.button-actions {
   display: none;
   position: absolute;
   background: #eee;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  bottom: 20px;
-  margin: auto;
+  width: 60px;
+  height: 30px;
+  padding-top: 10px;
+  border-radius: 20px;
+  bottom: 15px;
   left: 0;
   right: 0;
+  margin: auto;
   border: 1px solid white;
   font-size: 10px;
   text-align: center;
   line-height: 21px;
+  font-style: normal;
 }
 
 .ellipsis {
@@ -51,7 +57,7 @@ body {
   border: 2px solid white;
 }
 
-.btn:hover i {
+.btn:hover .button-actions {
   display: block;
 }
 

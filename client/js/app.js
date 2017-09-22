@@ -154,6 +154,14 @@ class App {
     return this.colors[index]
   }
 
+  removeButton (event, id) {
+    event.stopPropagation()
+    const $button = new El(`#btn-${id}`)
+    $button.remove()
+
+    this.send({type: 'removeButton', channel: this.channel, id})
+  }
+
   addButton (event, button = {}) {
     let {id, name} = button
     if (event) event.stopPropagation()
@@ -167,7 +175,10 @@ class App {
     this.$buttons.prependHtml(`
       <div id="${elId}" data-id="${id}" class="btn${empty} ${color}">
         <p class="ellipsis">${name}</p>
-        <i title="Download" onclick="app.download(event, ${id})">D</i>
+        <div class="button-actions">
+          <i title="Download" class="download" onclick="app.download(event, ${id})">💾</i>
+          <i title="Delete" class="remove" onclick="app.removeButton(event, ${id})">⌫</i>
+        </div>
       </div>
     `)
 

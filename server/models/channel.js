@@ -54,6 +54,20 @@ class Channel {
       callback
     )
   }
+
+  removeButton ({channel, id}, callback) {
+    if (!channel) return
+    console.log('DB: REMOVE BUTTON', {channel, id})
+    this.collection.update(
+      {name: channel},
+      {
+        $set: { updated: new Date() },
+        $pull: { buttons: {id: id.toString()} },
+      },
+      { multi: true },
+      callback
+    )
+  }
 }
 
 const channel = new Channel()

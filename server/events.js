@@ -15,4 +15,12 @@ function getChannel ({broadcast, send, ws, message}) {
   })
 }
 
-module.exports = { getChannel }
+function removeButton ({broadcast, send, ws, message}) {
+  const {channel, id} = message
+  console.log(`REMOVE BUTTON: ${id} @ ${channel}`)
+  channelModel.removeButton({channel, id}, () => {
+    console.log(`BUTTON REMOVED Successfully: ${id} @ ${channel}`)
+  })
+}
+
+module.exports = { getChannel, removeButton }
