@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="description" content="Instant button generator." />
     <meta name="keywords" content="instabuddy, audio, fun, button, generator" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
 
     <!-- Icons. -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -17,6 +18,16 @@
 
     <!-- Styles. -->
     <link rel="stylesheet" href="/app.min.css">
+
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-83250562-8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments)};
+      gtag('js', new Date());
+
+      gtag('config', 'UA-83250562-8');
+    </script>
   </head>
   <body id="top" onkeydown="app.onKey(event.keyCode)">
     <div id="buttons" onclick="app.onButtonClick(event)">
