@@ -18,6 +18,16 @@ class Channel {
     this.collection.save(channel, callback)
   }
 
+  create (name, callback) {
+    name = name.trim()
+    if (!name) return
+    this.collection.save({
+      name,
+      created: new Date(),
+      updated: new Date()
+    }, callback)
+  }
+
   reset (channel, callback) {
     if (!channel) return
     this.collection.update(

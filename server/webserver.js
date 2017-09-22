@@ -1,26 +1,59 @@
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
-const mkdirp = require('mkdirp')
 const channelModel = require('./models/channel')
-const storage = require('./storage')
+const storageAdapter = require('./storage-adapter')
 
 const app = express()
 const port = process.env.PORT || 3000
+const env = process.env.ENV || 'dev'
 const audioPath = path.join(__dirname, '../audio')
 const pathMap = {
   prod: 'dist',
   dev: 'client'
 }
+const envPath = pathMap[env]
 
 function start (callback) {
-  const env = process.env.ENV || 'dev'
-  const envPath = pathMap[env]
-  const staticPath = path.join(__dirname, `../${envPath}`)
+  setRoutes()
+
+  if (typeof callback !== 'function') return listen()
+  callback(app)
+}
+
+function setLocalAudioRoutes () {
   const audioPath = path.join(__dirname, '../audio')
+  app.use('/audio', express.static(audioPath))
+
+  app.post('/binary/:channel/:id/:name', (req, res) => {
+    const {id, name, channel} = req.params
+    console.log(`SAVE BINARY DATA: ${id}:${name} @ ${channel}`)
+
+    const data = {id, name, channel}
+    storageAdapter.saveBinary(req, audioPath, data) // Save to disk.
+  })
+}
+
+function setRemoteAudioRoutes () {
+  app.post('/binary/:channel/:id/:name', (req, res) => {
+    const {id, name, channel} = req.params
+    console.log(`SAVE BINARY DATA: ${id}:${name} @ ${channel}`)
+
+    const data = {id, name, channel}
+    storageAdapter.upload(req, data) // Save on the cloud.
+  })
+}
+
+function setRoutes (localAudio = false) {
+  const staticPath = path.join(__dirname, `../${envPath}`)
+
+  if (localAudio) {
+    setLocalAudioRoutes()
+  } else {
+    setRemoteAudioRoutes()
+  }
 
   app.use('/', express.static(staticPath))
-  app.use('/audio', express.static(audioPath))
   app.set('views', path.resolve(envPath))
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html')
@@ -40,83 +73,23 @@ function start (callback) {
     })
   })
 
-  app.post('/binary/:channel/:id/:name', (req, res) => {
-    const {id, name, channel} = req.params
-    console.log(`SAVE BINARY DATA: ${id}:${name} @ ${channel}`)
-
-    const data = {id, name, channel}
-    // saveBinary(req, data) // Save to disk.
-    upload(req, data)
+  app.get('/channel/:id/create', (req, res) => {
+    const id = req.params.id
+    console.log(`CREATE CHANNEL '${id}'`)
+    channelModel.create(id, () => {
+      console.log(`CHANNEL '${id}' CREATED successfully.`)
+      res.redirect(`/channel/${id}`)
+    })
   })
 
   app.use((req, res) => {
     res.sendStatus(404)
   })
-
-  if (typeof callback !== 'function') return listen()
-  callback(app)
 }
 
 function listen () {
   app.listen(port, () => {
     console.log(`INSTABUDDY server listening on http://localhost:${port}`)
-  })
-}
-
-function upload (req, data) {
-  bufferify(req, (buffer) => {
-    const id = `${data.channel}-${data.id}`
-    storage.upload({buffer, id}, (result) => {
-      console.log('STORAGE UPLOAD, result:', result)
-
-      // Add storage src.
-      data.src = result.secure_url
-      saveDb(data)
-    })
-  })
-}
-
-function bufferify (req, callback) {
-  let buffer = new Buffer('')
-  req.on('data', function(chunk) {
-    buffer = Buffer.concat([buffer, chunk])
-  })
-  req.on('end', () => {
-    callback(buffer)
-  })
-}
-
-function saveBinary (req, data) {
-  const filePath = `${audioPath}/${data.channel}`
-  const file = `${filePath}/${data.id}.webm`
-
-  // Ensure path exists.
-  mkdirp(filePath, (err) => {
-    if (err) {
-      console.log(`ERROR: UNABLE TO SAVE FILE: '${file}'`, err)
-      return
-    }
-
-    const fileWriter = fs.createWriteStream(file)
-    let buffer = new Buffer('')
-    req.on('data', function(chunk) {
-        buffer = Buffer.concat([buffer, chunk])
-    })
-    req.on('end', () => {
-      fileWriter.write(buffer)
-      fileWriter.end()
-      console.log('SAVE BINARY: File written OK:', file)
-
-      data.src = `/audio/${data.channel}/${data.id}.webm`
-      saveDb(data)
-    })
-  })
-}
-
-// Save new button in db.
-function saveDb (data) {
-  channelModel.addButton(data, (err, response) => {
-    console.log('DB: Saved OK!', response)
   })
 }
 
