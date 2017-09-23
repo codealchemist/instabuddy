@@ -13,6 +13,7 @@ body {
 
 .btn i {
   font-size: 16px;
+  font-style: normal;
 }
 
 .button-actions {
@@ -31,7 +32,6 @@ body {
   font-size: 10px;
   text-align: center;
   line-height: 21px;
-  font-style: normal;
 }
 
 .ellipsis {
