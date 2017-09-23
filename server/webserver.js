@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
+const secure = require('express-force-https')
 const channelModel = require('./models/channel')
 const storageAdapter = require('./storage-adapter')
 
@@ -53,6 +54,7 @@ function setRoutes (localAudio = false) {
     setRemoteAudioRoutes()
   }
 
+  app.use(secure)
   app.use('/', express.static(staticPath))
   app.set('views', path.resolve(envPath))
   app.engine('html', require('ejs').renderFile);
