@@ -45,6 +45,16 @@ function setRemoteAudioRoutes () {
   })
 }
 
+function redirectToHeroku (req, res, next) {
+  const host = req.get('host')
+  if (host !== 'instabuddy.herokuapp.com' && host !== 'localhost:3000') {
+    res.redirect(`https://instabuddy.herokuapp.com${req.path}`)
+    return
+  }
+
+  next()
+}
+
 function setRoutes (localAudio = false) {
   const staticPath = path.join(__dirname, `../${envPath}`)
 
@@ -54,6 +64,7 @@ function setRoutes (localAudio = false) {
     setRemoteAudioRoutes()
   }
 
+  app.use(redirectToHeroku)
   app.use(secure)
   app.use('/', express.static(staticPath))
   app.set('views', path.resolve(envPath))
