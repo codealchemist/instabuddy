@@ -2,6 +2,7 @@ class App {
   constructor () {
     this.$buttons = new El('#buttons')
     this.$audio = document.querySelector('audio')
+    this.$addButton = new El('#add')
     this.audioCollection = {}
     this.recorder = null
     this.recordingTime = 3000 // ms
@@ -22,7 +23,11 @@ class App {
       .then(stream => {
         this.recorder = new MediaRecorder(stream)
       })
-      .catch(e => log(e))
+      .catch(e => {
+        log(e)
+        alert('Your browser does not support audio recording, sorry.')
+        this.$addButton.hide()
+      })
 
     // Connect to socket server, set event handlers and get current channel.
     this.connect(() => {
@@ -128,11 +133,16 @@ class App {
     let src = this.audioCollection[id].src
     this.$audio.src = src
     this.$audio.play()
+    this.sendPlay(src)
 
     setTimeout(() => {
       log('playing stopped')
       $el.removeClass('playing')
     }, this.recordingTime)
+  }
+
+  sendPlay (src) {
+    this.send({type: 'play', channel: this.channel, src})
   }
 
   download (event, id) {

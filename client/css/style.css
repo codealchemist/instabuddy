@@ -24,7 +24,7 @@ body {
   height: 30px;
   padding-top: 10px;
   border-radius: 20px;
-  bottom: 15px;
+  bottom: -10px;
   left: 0;
   right: 0;
   margin: auto;
@@ -48,13 +48,13 @@ body {
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   cursor: pointer;
   transition: all 1s;
 }
 
 .btn:hover {
-  border: 2px solid white;
+  border: 1px solid white;
 }
 
 .btn:hover .button-actions {
@@ -82,7 +82,13 @@ body {
 }
 
 .empty {
-  opacity: 0.2;
+  background-color: #111 !important;
+  color: #444;
+  border: 1px solid #444;
+}
+
+.empty:hover .download {
+  display: none;
 }
 
 .btn.recording {
@@ -126,4 +132,22 @@ body {
   animation-duration: 1.5s;
   animation-name: ripple2;
   animation-iteration-count: infinite;
+}
+
+#background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.background-text {
+  z-index: 0;
+  font-weight: bold;
+  color: #111;
+  font-size: 12vw;
 }

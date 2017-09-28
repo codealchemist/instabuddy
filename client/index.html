@@ -33,9 +33,13 @@
       gtag('config', 'UA-83250562-8');
     </script>
   </head>
-  <body id="top" onkeydown="app.onKey(event.keyCode)">
+  <body onkeydown="app.onKey(event.keyCode)">
+    <div id="background">
+      <div class="background-text">InstaBuddy</div>
+    </div>
+
     <div id="buttons" onclick="app.onButtonClick(event)">
-      <div class="btn add" onclick="app.addButton(event)">
+      <div id="add" class="btn add" onclick="app.addButton(event)">
         <p>+</p>
       </div>
     </div>

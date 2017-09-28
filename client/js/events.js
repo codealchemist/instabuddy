@@ -32,4 +32,8 @@ class InstabuddyEvents {
   log () {
     console.log('[ EVENTS ]-->', ...arguments)
   }
+
+  play (src) {
+    this.log('PLAY', src)
+  }
 }
