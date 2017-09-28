@@ -23,4 +23,9 @@ function removeButton ({broadcast, send, ws, message}) {
   })
 }
 
-module.exports = { getChannel, removeButton }
+function play ({broadcast, send, ws, message}) {
+  console.log(`PLAY @${message.channel}:`, message.src)
+  broadcast(ws, message)
+}
+
+module.exports = { getChannel, removeButton, play }

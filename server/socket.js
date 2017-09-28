@@ -49,15 +49,16 @@ function setEvents () {
 }
 
 function broadcast (ws, message) {
+  const data = JSON.stringify(message)
   wss.clients.forEach((client) => {
     if (client === ws) return
     if (client.readyState !== WebSocket.OPEN) return
-    client.send(message, (error) => {}) // eslint-disable-line
+    client.send(data, (error) => {}) // eslint-disable-line
   })
 }
 
 function send (ws, message) {
-  console.log('SEND:', message)
+  // console.log('SEND:', message)
   const data = JSON.stringify(message)
   if (ws.readyState !== WebSocket.OPEN) return
   ws.send(data, (error) => {}) // eslint-disable-line

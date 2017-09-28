@@ -133,7 +133,7 @@ class App {
     let src = this.audioCollection[id].src
     this.$audio.src = src
     this.$audio.play()
-    this.sendPlay(src)
+    this.sendPlay(id, src)
 
     setTimeout(() => {
       log('playing stopped')
@@ -141,8 +141,11 @@ class App {
     }, this.recordingTime)
   }
 
-  sendPlay (src) {
-    this.send({type: 'play', channel: this.channel, src})
+  sendPlay (id, src) {
+    this.send({
+      type: 'play',
+      data: { channel: this.channel, id, src }
+    })
   }
 
   download (event, id) {

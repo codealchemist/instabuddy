@@ -33,7 +33,19 @@ class InstabuddyEvents {
     console.log('[ EVENTS ]-->', ...arguments)
   }
 
-  play (src) {
-    this.log('PLAY', src)
+  play ({type, data, error}) {
+    const {channel, id, src} = data
+    this.log(`BROADCAST PLAY @${channel}:`, src)
+    if (this.app.channel !== channel) return
+
+    const $el = new El(`#btn-${id}`)
+    this.app.$audio.src = src
+    this.app.$audio.play()
+    $el.addClass('playing')
+
+    setTimeout(() => {
+      this.log('BROADCAST PLAYING stopped')
+      $el.removeClass('playing')
+    }, this.app.recordingTime)
   }
 }
