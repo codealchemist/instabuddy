@@ -90,13 +90,24 @@ function setRoutes (localAudio = false) {
     })
   })
 
-  app.get('/channel/:id/create', (req, res) => {
-    const id = req.params.id
-    console.log(`CREATE CHANNEL '${id}'`)
-    channelModel.create(id, () => {
-      console.log(`CHANNEL '${id}' CREATED successfully.`)
-      res.redirect(`/channel/${id}`)
+  app.get('/channel/:channel/play/:buttonId', (req, res) => {
+    const {channel, buttonId} = req.params
+    console.log(`PLAY from CHANNEL '${channel}':`, buttonId)
+    channelModel.getButton({channel, buttonId}, (err, response) => {
+      if (err) {
+        console.log(`ERROR playing standalone button @${channel}: ${buttonId}`, err)
+        return
+      }
+
+      const button = response.buttons[0]
+      res.render('button', {channel, button})
     })
+  })
+
+  app.get('/channel/:id', (req, res) => {
+    const id = req.params.id
+    console.log(`Opening channel: ${id}`)
+    res.render('index')
   })
 
   app.use((req, res) => {

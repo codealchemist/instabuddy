@@ -4,7 +4,7 @@ const channelModel = require('./models/channel')
 
 function upload (req, data) {
   bufferify(req, (buffer) => {
-    const id = `${data.channel}-${data.id}`
+    const id = `${data.channel}-${data.id}.webm`
     storage.upload({buffer, id}, (result) => {
       console.log('STORAGE UPLOAD, result:', result)
 

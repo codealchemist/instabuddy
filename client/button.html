@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>InstaBuddy</title>
+    <title>InstaBuddy @<%= channel %> / <%= button.name %></title>
 
     <meta charset="UTF-8">
-    <meta name="description" content="Instant button generator." />
-    <meta name="keywords" content="instabuddy, audio, fun, button, generator" />
+    <meta name="description" content="InstaBuddy @<%= channel %> / <%= button.name %>" />
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
     <!-- Icons. -->
@@ -17,7 +16,11 @@
     <meta name="theme-color" content="#ffffff">
 
     <!-- Styles. -->
-    <link rel="stylesheet" href="/app.min.css">
+    <!-- build:css /button.min.css -->
+    <link rel="stylesheet" href="/css/button-animations.css" />
+    <link rel="stylesheet" href="/css/button.css" />
+    <link rel="stylesheet" href="/css/colors.css" />
+    <!-- endbuild -->
 
     <!-- Global Site Tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-83250562-8"></script>
@@ -29,21 +32,37 @@
       gtag('config', 'UA-83250562-8');
     </script>
   </head>
-  <body onkeydown="app.onKey(event.keyCode)">
+  <body onkeydown="app.onKey(event.keyCode)" class="center">
     <div id="background">
       <div class="background-text">InstaBuddy</div>
     </div>
 
     <div id="buttons" onclick="app.onButtonClick(event)">
-      <div id="add" class="btn add" onclick="app.addButton(event)">
-        <p>+</p>
+      <div id="btn-<%= button.id %>" data-id="<%= button.id %>" class="btn color1">
+        <p class="ellipsis"><%= button.name %></p>
+        <div class="button-actions">
+          <i title="Download" class="download" onclick="app.download(event, <%= button.id %>)">💾</i>
+        </div>
       </div>
     </div>
 
     <audio></audio>
     <a id="download"></a>
 
-    <script>const mode = 'default'</script>
-    <script src="/app.min.js"></script>
+    <script>const mode = 'standalone'</script>
+    <!-- build:js /button.min.js -->
+    <script src="/js/el.js"></script>
+    <script src="/js/events.js"></script>
+    <script src="/js/app.js"></script>
+    <!-- endbuild -->
+
+    <script>
+      const button = {
+        id: '<%= button.id %>',
+        name: '<%= button.name %>',
+        src: '<%= button.src %>'
+      }
+      app.addAudio('<%= button.id %>', button)
+    </script>
   </body>
 </html>

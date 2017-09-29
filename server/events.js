@@ -24,7 +24,7 @@ function removeButton ({broadcast, send, ws, message}) {
 }
 
 function play ({broadcast, send, ws, message}) {
-  console.log(`PLAY @${message.channel}:`, message.src)
+  console.log(`PLAY @${message.data.channel}:`, message.data.src)
   broadcast(ws, message)
 }
 

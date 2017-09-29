@@ -1,12 +1,12 @@
 class App {
-  constructor () {
+  constructor (mode) {
     this.$buttons = new El('#buttons')
     this.$audio = document.querySelector('audio')
     this.$addButton = new El('#add')
     this.audioCollection = {}
     this.recorder = null
     this.recordingTime = 3000 // ms
-    this.channel = location.pathname.replace('/channel/', '')
+    this.channel = this.getChannelName()
     this.colors = [
       'color1',
       'color2',
@@ -23,6 +23,8 @@ class App {
       noWebSocketSupport: 'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)',
       notSupported: 'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)'
     }
+    this.playing = false
+    this.mode = mode
 
     try {
       navigator.mediaDevices.getUserMedia({audio:true})
@@ -45,8 +47,16 @@ class App {
     // Connect to socket server, set event handlers and get current channel.
     this.connect(() => {
       this.events = new InstabuddyEvents(this)
-      this.getChannel()
+      if (this.mode !== 'standalone') this.getChannel()
     })
+  }
+
+  getChannelName () {
+    if (!location.pathname.match('play')) {
+      return location.pathname.replace('/channel/', '')
+    }
+
+    return location.pathname.match(/channel\/(.*?)\//)[1]
   }
 
   handleError (type, e) {
@@ -160,7 +170,10 @@ class App {
   }
 
   play (id) {
+    if (this.playing) return
+
     log('play', id)
+    this.playing = true
     const $el = new El(`#btn-${id}`)
 
     $el.addClass('playing')
@@ -172,10 +185,12 @@ class App {
     setTimeout(() => {
       log('playing stopped')
       $el.removeClass('playing')
+      this.playing = false
     }, this.recordingTime)
   }
 
   sendPlay (id, src) {
+    console.log(`ID: ${id}, SRC: ${src}, CHANNEL: ${this.channel}`)
     this.send({
       type: 'play',
       data: { channel: this.channel, id, src }
@@ -244,4 +259,4 @@ function log () {
   console.log('[ APP ]-->', ...arguments)
 }
 
-const app = new App()
+const app = new App(mode)

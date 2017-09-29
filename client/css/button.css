@@ -1,5 +1,5 @@
 body {
-  font: 18px arial;
+  font: 25px arial;
   background: black;
 }
 
@@ -12,7 +12,7 @@ body {
 }
 
 .btn i {
-  font-size: 16px;
+  font-size: 25px;
   font-style: normal;
 }
 
@@ -45,17 +45,44 @@ body {
   position: relative;
   background: #eee;
   color: black;
-  width: 150px;
-  height: 150px;
+  width: 40vw;
+  height: 40vw;
   border-radius: 50%;
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 1s;
 }
 
-.btn.btn-big {
+.btn.playing:before {
+  content: '';
   width: 40vw;
   height: 40vw;
+  border: 2px solid white;
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  border: 4px solid white;
+  border-radius: 50%;
+  display: block;
+  animation-duration: 1s;
+  animation-name: ripple1;
+  animation-iteration-count: infinite;
+}
+
+.btn.playing:after {
+  content: '';
+  width: 40vw;
+  height: 40vw;
+  border: 2px solid white;
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  border: 4px solid white;
+  border-radius: 50%;
+  display: block;
+  animation-duration: 1.5s;
+  animation-name: ripple2;
+  animation-iteration-count: infinite;
 }
 
 .btn:hover {
@@ -73,17 +100,9 @@ body {
   left: 0;
   right: 0;
   margin: auto;
-  height: 20px;
+  height: 28px;
   text-align: center;
   pointer-events: none;
-}
-
-.add {
-  font-size: 40px;
-}
-
-.add p {
-  height: 40px;
 }
 
 .empty {
@@ -96,47 +115,8 @@ body {
   display: none;
 }
 
-.btn.recording {
-  background: red !important;
-  color: white;
-  border: 1px solid white;
-  opacity: 1;
-}
-
 .btn.playing {
   border: 1px solid white;
-}
-
-.btn.playing:before {
-  content: '';
-  width: 150px;
-  height: 150px;
-  border: 2px solid white;
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  border: 4px solid white;
-  border-radius: 50%;
-  display: block;
-  animation-duration: 1s;
-  animation-name: ripple1;
-  animation-iteration-count: infinite;
-}
-
-.btn.playing:after {
-  content: '';
-  width: 150px;
-  height: 150px;
-  border: 2px solid white;
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  border: 4px solid white;
-  border-radius: 50%;
-  display: block;
-  animation-duration: 1.5s;
-  animation-name: ripple2;
-  animation-iteration-count: infinite;
 }
 
 #background {

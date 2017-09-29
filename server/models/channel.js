@@ -68,6 +68,24 @@ class Channel {
       callback
     )
   }
+
+  getButton ({channel, buttonId}, callback) {
+    if (!channel || !buttonId) return
+
+    // this.collection.find({name: channel.toString()}, (response) => {
+    //   console.log('RESPONSE', response)
+    // })
+
+    this.collection.findOne(
+      { name: 'yeah' },
+      {
+        buttons: {
+          $elemMatch: {id: '1506125182507'}
+        }
+      },
+      callback
+    )
+  }
 }
 
 const channel = new Channel()
