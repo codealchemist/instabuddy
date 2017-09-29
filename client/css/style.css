@@ -92,7 +92,7 @@ body {
 }
 
 .btn.recording {
-  background: red;
+  background: red !important;
   color: white;
   border: 2px solid white;
   opacity: 1;
