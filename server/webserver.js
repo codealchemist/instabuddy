@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
-const secure = require('express-force-https')
+const httpsEnforcer = require('https-enforcer')
 const channelModel = require('./models/channel')
 const storageAdapter = require('./storage-adapter')
 
@@ -45,9 +45,13 @@ function setRemoteAudioRoutes () {
   })
 }
 
+function isPrivateIp (host) {
+  return host.match(/^localhost|(^127\.)|(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])/)
+}
+
 function redirectToHeroku (req, res, next) {
   const host = req.get('host')
-  if (host !== 'instabuddy.herokuapp.com' && host !== 'localhost:3000') {
+  if (host !== 'instabuddy.herokuapp.com' && !isPrivateIp(host)) {
     res.redirect(`https://instabuddy.herokuapp.com${req.path}`)
     return
   }
@@ -65,7 +69,7 @@ function setRoutes (localAudio = false) {
   }
 
   app.use(redirectToHeroku)
-  app.use(secure)
+  app.use(httpsEnforcer)
   app.use('/', express.static(staticPath))
   app.set('views', path.resolve(envPath))
   app.engine('html', require('ejs').renderFile);

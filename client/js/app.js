@@ -18,16 +18,31 @@ class App {
       'color8'
     ]
     this.downloadLink = document.querySelector('#download')
+    this.messages = {
+      noAudioRecording: 'Your browser does not support audio recording, sorry.',
+      noWebSocketSupport: 'Your browser is not supported, please try with latest Chrome or Firefox :)'
+    }
 
-    navigator.mediaDevices.getUserMedia({audio:true})
-      .then(stream => {
-        this.recorder = new MediaRecorder(stream)
-      })
-      .catch(e => {
-        log(e)
-        alert('Your browser does not support audio recording, sorry.')
-        this.$addButton.hide()
-      })
+    try {
+      navigator.mediaDevices.getUserMedia({audio:true})
+        .then(stream => {
+          this.recorder = new MediaRecorder(stream)
+        })
+        .catch(e => {
+          log(e)
+          alert(this.messages.noAudioRecording)
+          this.$addButton.hide()
+        })
+    } catch (e) {
+      log(e)
+      alert(this.messages.noAudioRecording)
+    }
+
+    // Check for websockets support.
+    if (! 'WebSocket' in window) {
+      alert(this.messages.noWebSocketSupport)
+      return
+    }
 
     // Connect to socket server, set event handlers and get current channel.
     this.connect(() => {
