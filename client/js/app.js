@@ -29,7 +29,11 @@ class App {
     try {
       navigator.mediaDevices.getUserMedia({audio:true})
         .then(stream => {
-          this.recorder = new MediaRecorder(stream)
+          try {
+            this.recorder = new MediaRecorder(stream)
+          } catch (e) {
+            this.handleError('noAudioRecording', e)
+          }
         })
         .catch(e => {
           this.handleError('noAudioRecording', e)
@@ -63,8 +67,8 @@ class App {
     const handlers = {
       noAudioRecording: () => {
         log(e)
-        alert(this.messages.noAudioRecording)
         this.$addButton.hide()
+        alert(this.messages.noAudioRecording)
       },
       noWebSocketSupport: () => {
         log(e)
