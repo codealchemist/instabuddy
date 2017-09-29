@@ -20,7 +20,8 @@ class App {
     this.downloadLink = document.querySelector('#download')
     this.messages = {
       noAudioRecording: 'Your browser does not support audio recording, sorry.',
-      noWebSocketSupport: 'Your browser is not supported, please try with latest Chrome or Firefox :)'
+      noWebSocketSupport: 'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)',
+      notSupported: 'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)'
     }
 
     try {
@@ -29,13 +30,10 @@ class App {
           this.recorder = new MediaRecorder(stream)
         })
         .catch(e => {
-          log(e)
-          alert(this.messages.noAudioRecording)
-          this.$addButton.hide()
+          this.handleError('noAudioRecording', e)
         })
     } catch (e) {
-      log(e)
-      alert(this.messages.noAudioRecording)
+      this.handleError('noAudioRecording', e)
     }
 
     // Check for websockets support.
@@ -49,6 +47,27 @@ class App {
       this.events = new InstabuddyEvents(this)
       this.getChannel()
     })
+  }
+
+  handleError (type, e) {
+    const handlers = {
+      noAudioRecording: () => {
+        log(e)
+        alert(this.messages.noAudioRecording)
+        this.$addButton.hide()
+      },
+      noWebSocketSupport: () => {
+        log(e)
+        alert(this.messages.noWebSocketSupport)
+      }
+    }
+
+    const defaultHandler = () => {
+      alert(this.messages.notSupported)
+    }
+
+    const handlerMethod = handlers[type] || defaultHandler
+    handlerMethod()
   }
 
   connect (callback) {
