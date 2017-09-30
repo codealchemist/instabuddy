@@ -14,6 +14,7 @@ const paths = {
   js: './client/js',
   html: './client/index.html',
   htmlButton: './client/button.html',
+  htmlButtonNotFound: './client/button-not-found.html',
   css: './client/css',
   audio: './client/audio',
   dist: './dist'
@@ -37,7 +38,7 @@ gulp.task('copy', (cb) => {
 
 gulp.task('build', (cb) => {
   pump([
-    gulp.src([`${paths.html}`, `${paths.htmlButton}`]),
+    gulp.src([`${paths.html}`, `${paths.htmlButton}`, `${paths.htmlButtonNotFound}`]),
     useref(),
     gulpif('*.js', babel()),
     gulpif('*.js', uglify()),
