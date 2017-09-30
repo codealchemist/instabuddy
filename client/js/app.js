@@ -203,12 +203,16 @@ class App {
     this.$audio.src = src
 
     // Start playback.
+    try {
     this.$audio
       .play()
       .then(() => {})
       .catch(e => {
         this.handleError('noAudioPlayback', e)
       })
+    } catch (e) {
+      log(`ERROR PLAYING '${id}': ${src}`, e)
+    }
     this.sendPlay(id, src)
 
     setTimeout(() => {
