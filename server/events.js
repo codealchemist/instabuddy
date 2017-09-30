@@ -25,6 +25,35 @@ function removeButton ({broadcast, send, ws, message}) {
 
 function play ({broadcast, send, ws, message}) {
   console.log(`PLAY @${message.data.channel}:`, message.data.src)
+
+  // Get source URL.
+  const {channel, src, id} = message.data
+  if (src.match(/^blob/)) {
+    console.log('GET BUTTON real src...')
+    channelModel.getButton({channel, buttonId: id}, (err, response) => {
+      if (err) {
+        console.log(`ERROR getting button '${id}' for remote play:`, err)
+        return
+      }
+
+      const buttons = response.buttons
+
+      // Empty.
+      if (!buttons || !buttons.length) {
+        console.log(`BUTTON for remote play NOT FOUND: @${channel} / ${id}`)
+        return
+      }
+
+      // Instant button found. Use this src on broadcast.
+      console.log('GOT BUTTON for remote play', response)
+      const button = buttons[0]
+      message.data.src = button.src
+      broadcast(ws, message)
+    })
+    return
+  }
+
+  // Already got proper URL, broadcast.
   broadcast(ws, message)
 }
 

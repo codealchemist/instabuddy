@@ -7,6 +7,10 @@ class El {
     this.$el = element
   }
 
+  exists () {
+    return !!this.$el
+  }
+
   get () {
     return this.$el
   }

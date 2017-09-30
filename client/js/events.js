@@ -39,6 +39,8 @@ class InstabuddyEvents {
     if (this.app.channel !== channel) return
 
     const $el = new El(`#btn-${id}`)
+    if (!$el.exists()) return
+
     this.app.$audio.src = src
     this.app.$audio.play()
     $el.addClass('playing')
