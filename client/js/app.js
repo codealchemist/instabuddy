@@ -3,6 +3,7 @@ class App {
     this.$buttons = new El('#buttons')
     this.$audio = document.querySelector('audio')
     this.$addButton = new El('#add')
+    this.$error = new El('#error')
     this.audioCollection = {}
     this.recorder = null
     this.recordingTime = 3000 // ms
@@ -78,6 +79,8 @@ class App {
       noAudioPlayback: () => {
         log(e)
         alert(this.messages.noAudioPlayback)
+        this.$buttons.hide()
+        this.showError(this.messages.noAudioPlayback)
       }
     }
 
@@ -87,6 +90,12 @@ class App {
 
     const handlerMethod = handlers[type] || defaultHandler
     handlerMethod()
+  }
+
+  showError (message) {
+    this.$error
+      .html(message)
+      .show()
   }
 
   connect (callback) {
@@ -187,11 +196,13 @@ class App {
     let src = this.audioCollection[id].src
     this.$audio.src = src
 
-    try {
-      this.$audio.play()
-    } catch (e) {
-      this.handleError('noAudioPlayback', e)
-    }
+    // Start playback.
+    this.$audio
+      .play()
+      .then(() => {})
+      .catch(e => {
+        this.handleError('noAudioPlayback', e)
+      })
     this.sendPlay(id, src)
 
     setTimeout(() => {
