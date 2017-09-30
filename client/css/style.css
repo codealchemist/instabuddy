@@ -96,7 +96,8 @@ body {
   border: 1px solid #444;
 }
 
-.empty:hover .download {
+.empty:hover .download,
+.empty:hover .share {
   display: none;
 }
 
