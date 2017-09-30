@@ -21,7 +21,8 @@ class App {
     this.messages = {
       noAudioRecording: 'Your browser does not support audio recording, sorry.',
       noWebSocketSupport: 'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)',
-      notSupported: 'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)'
+      notSupported: 'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)',
+      noAudioPlayback: 'Audio playback is not supported on your browser. Please, try with latest Chrome or Firefox :)'
     }
     this.playing = false
     this.mode = mode
@@ -73,6 +74,10 @@ class App {
       noWebSocketSupport: () => {
         log(e)
         alert(this.messages.noWebSocketSupport)
+      },
+      noAudioPlayback: () => {
+        log(e)
+        alert(this.messages.noAudioPlayback)
       }
     }
 
@@ -161,8 +166,6 @@ class App {
       response
         .arrayBuffer()
         .then((buffer) => {
-          console.log(buffer)
-
           const meta = {
             id: button.id,
             name: button.name,
@@ -183,7 +186,12 @@ class App {
     $el.addClass('playing')
     let src = this.audioCollection[id].src
     this.$audio.src = src
-    this.$audio.play()
+
+    try {
+      this.$audio.play()
+    } catch (e) {
+      this.handleError('noAudioPlayback', e)
+    }
     this.sendPlay(id, src)
 
     setTimeout(() => {
@@ -194,7 +202,6 @@ class App {
   }
 
   sendPlay (id, src) {
-    console.log(`ID: ${id}, SRC: ${src}, CHANNEL: ${this.channel}`)
     this.send({
       type: 'play',
       data: { channel: this.channel, id, src }
