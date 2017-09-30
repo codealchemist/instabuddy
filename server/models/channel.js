@@ -73,7 +73,7 @@ class Channel {
     if (!channel || !buttonId) return
 
     this.collection.findOne(
-      { name: 'yeah' },
+      { name: channel.toString() },
       {
         buttons: {
           $elemMatch: {id: buttonId.toString()}
