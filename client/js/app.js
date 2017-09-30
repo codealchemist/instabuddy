@@ -28,6 +28,24 @@ class App {
     this.playing = false
     this.mode = mode
 
+    if (this.mode === 'normal') {
+      this.initRecording()
+    }
+
+    // Check for websockets support.
+    if (! 'WebSocket' in window) {
+      alert(this.messages.noWebSocketSupport)
+      return
+    }
+
+    // Connect to socket server, set event handlers and get current channel.
+    this.connect(() => {
+      this.events = new InstabuddyEvents(this)
+      if (this.mode !== 'standalone') this.getChannel()
+    })
+  }
+
+  initRecording () {
     try {
       navigator.mediaDevices.getUserMedia({audio:true})
         .then(stream => {
@@ -43,18 +61,6 @@ class App {
     } catch (e) {
       this.handleError('noAudioRecording', e)
     }
-
-    // Check for websockets support.
-    if (! 'WebSocket' in window) {
-      alert(this.messages.noWebSocketSupport)
-      return
-    }
-
-    // Connect to socket server, set event handlers and get current channel.
-    this.connect(() => {
-      this.events = new InstabuddyEvents(this)
-      if (this.mode !== 'standalone') this.getChannel()
-    })
   }
 
   getChannelName () {
