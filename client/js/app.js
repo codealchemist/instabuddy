@@ -8,6 +8,7 @@ class App {
     this.recorder = null
     this.recordingTime = 3000 // ms
     this.channel = this.getChannelName()
+    this.url = location.href
     this.colors = [
       'color1',
       'color2',
@@ -30,6 +31,7 @@ class App {
 
     if (this.mode === 'normal') {
       this.initRecording()
+      this.initClipboard()
     }
 
     // Check for websockets support.
@@ -42,6 +44,17 @@ class App {
     this.connect(() => {
       this.events = new InstabuddyEvents(this)
       if (this.mode !== 'standalone') this.getChannel()
+    })
+  }
+
+  initClipboard() {
+    // No clipboard support.
+    if (!Clipboard.isSupported()) return
+
+    // Clipboard supported!
+    const clipboard = new Clipboard('i.share')
+    clipboard.on('success', (e) => {
+      alert('Copied to Clipboard!')
     })
   }
 
@@ -137,11 +150,26 @@ class App {
   }
 
   onButtonClick (event) {
-    // log('button clicked', event)
+    // Share button.
+    if (event.target.className === 'share' && !Clipboard.isSupported()) {
+      this.openButtonUrl(event.target) // No clipboard support.
+      return
+    }
+
+    // Check if we have an Instant button id.
     const id = event.target.dataset.id
     if (!id) return
+
+    // Instant button.
     if (this.audioCollection[id].src) return this.play(id)
     this.record(id, event)
+  }
+
+  openButtonUrl (el) {
+    const buttonUrl = el.dataset['clipboard-text']
+    if (!buttonUrl) return
+
+    window.open(buttonUrl)
   }
 
   record (id, event) {
@@ -204,12 +232,12 @@ class App {
 
     // Start playback.
     try {
-    this.$audio
-      .play()
-      .then(() => {})
-      .catch(e => {
-        this.handleError('noAudioPlayback', e)
-      })
+      this.$audio
+        .play()
+        .then(() => {})
+        .catch(e => {
+          this.handleError('noAudioPlayback', e)
+        })
     } catch (e) {
       log(`ERROR PLAYING '${id}': ${src}`, e)
     }
@@ -272,6 +300,10 @@ class App {
         <p class="ellipsis">${name}</p>
         <div class="button-actions">
           <i title="Download" class="download" onclick="app.download(event, ${id})">💾</i>
+          <i
+            title="Share" class="share"
+            data-clipboard-text="${this.url}/play/${id}"
+          >🔗</i>
           <i title="Delete" class="remove" onclick="app.removeButton(event, ${id})">⌫</i>
         </div>
       </div>
@@ -280,6 +312,16 @@ class App {
     this.addAudio(id, {id, name, color})
 
     return id
+  }
+
+  getButtonLink (event, id) {
+    console.log('SHARE BUTTON', id)
+    event.stopPropagation()
+    event.preventDefault()
+
+    const buttonUrl = `${this.url}/play/${id}`
+    console.log(buttonUrl)
+
   }
 
   addAudio(id, button) {
