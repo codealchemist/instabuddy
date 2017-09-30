@@ -69,7 +69,7 @@ class App {
     const handlers = {
       noAudioRecording: () => {
         log(e)
-        this.$addButton.hide()
+        if (this.$addButton) this.$addButton.hide()
         alert(this.messages.noAudioRecording)
       },
       noWebSocketSupport: () => {
