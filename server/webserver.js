@@ -99,6 +99,14 @@ function setRoutes (localAudio = false) {
         return
       }
 
+      // Empty.
+      if (!response.buttons || !response.buttons.length) {
+        console.log(`CAN'T PLAY ${buttonId} @${channel}, document not found`)
+        res.render('button-not-found', {channel})
+        return
+      }
+
+      // Got button.
       const button = response.buttons[0]
       res.render('button', {channel, button})
     })

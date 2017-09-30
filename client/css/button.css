@@ -135,10 +135,16 @@ body {
   font-weight: bold;
   color: #111;
   font-size: 12vw;
+  text-align: center;
 }
 
 .center {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+em {
+  color: #222;
+  font-style: normal;
 }
