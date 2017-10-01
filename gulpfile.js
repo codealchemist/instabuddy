@@ -27,7 +27,7 @@ gulp.task('clean', () => {
 gulp.task('copy', (cb) => {
   return pump([
     gulp.src([
-      `${paths.js}/binary.min.js`,
+      `${paths.js}/reconnecting-websocket.min.js`,
       `${paths.src}/*`,
       `!${paths.src}/*.html`
     ]),

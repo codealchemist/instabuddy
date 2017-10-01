@@ -120,7 +120,7 @@ class App {
   connect (callback) {
     let wsProto = 'ws'
     if (location.protocol === 'https:') wsProto = 'wss'
-    this.ws = new WebSocket(`${wsProto}://${location.host}`)
+    this.ws = new ReconnectingWebSocket(`${wsProto}://${location.host}`)
     this.ws.binaryType = 'arraybuffer'
 
     this.ws.onopen = () => {
