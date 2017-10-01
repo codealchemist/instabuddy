@@ -90,7 +90,8 @@ function setRoutes (localAudio = false) {
     console.log(`Opening channel: ${id}`)
 
     const channelOpenGraph = Object.assign({}, openGraph, {
-      title: `InstaBuddy @${id}`
+      title: `InstaBuddy @${id}`,
+      url: `${openGraph.url}/channel/${id}`,
     })
     res.render('index', {openGraph: channelOpenGraph})
   })
@@ -124,6 +125,7 @@ function setRoutes (localAudio = false) {
       const button = response.buttons[0]
       const buttonOpenGraph = Object.assign({}, openGraph, {
         username: '',
+        url: `${openGraph.url}/channel/${channel}/play/${buttonId}`,
         title: button.name,
         description: `InstaBuddy @${channel}`
       })
