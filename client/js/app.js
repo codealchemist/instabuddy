@@ -27,6 +27,7 @@ class App {
       noAudioPlayback: 'Audio playback is not supported on your browser. Please, try with latest Chrome or Firefox :)'
     }
     this.playing = false
+    this.recording = false
     this.connected = false
     this.mode = mode
 
@@ -180,6 +181,9 @@ class App {
   }
 
   record (id, event) {
+    if (this.recording) return
+    this.recording = true
+
     log('recording started', id)
     const $el = new El(event.target)
     $el.addClass('recording')
@@ -201,6 +205,7 @@ class App {
       log('recording stopped', id)
       $el.removeClass('recording')
       $el.removeClass('empty')
+      this.recording = false
     }, this.recordingTime)
   }
 
