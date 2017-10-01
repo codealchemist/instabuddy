@@ -7,8 +7,9 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: flex-start;
-  align-content: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn i {

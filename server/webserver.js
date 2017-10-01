@@ -13,8 +13,7 @@ const pathMap = {
   prod: 'dist',
   dev: 'client'
 }
-// const envPath = pathMap[env]
-const envPath = pathMap['prod']
+const envPath = pathMap[env]
 
 function start (callback) {
   setRoutes()
