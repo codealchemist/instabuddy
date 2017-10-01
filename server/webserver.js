@@ -88,7 +88,11 @@ function setRoutes (localAudio = false) {
   app.get('/channel/:id', (req, res) => {
     const id = req.params.id
     console.log(`Opening channel: ${id}`)
-    res.render('index', {openGraph})
+
+    const channelOpenGraph = Object.assign({}, openGraph, {
+      title: `InstaBuddy @${id}`
+    })
+    res.render('index', {openGraph: channelOpenGraph})
   })
 
   app.get('/channel/:id/reset', (req, res) => {
