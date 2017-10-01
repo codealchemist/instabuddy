@@ -27,6 +27,7 @@ class App {
       noAudioPlayback: 'Audio playback is not supported on your browser. Please, try with latest Chrome or Firefox :)'
     }
     this.playing = false
+    this.connected = false
     this.mode = mode
 
     if (this.mode === 'normal') {
@@ -124,7 +125,13 @@ class App {
     this.ws.binaryType = 'arraybuffer'
 
     this.ws.onopen = () => {
+      if (this.connected) {
+        log('WebSocket reconnected.')
+        return
+      }
+
       log('WebSocket connected.')
+      this.connected = true
       if (typeof callback === 'function') callback()
     }
 
