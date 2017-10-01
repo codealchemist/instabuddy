@@ -15,6 +15,7 @@ const paths = {
   html: './client/index.html',
   htmlButton: './client/button.html',
   htmlButtonNotFound: './client/button-not-found.html',
+  partials: './client/partials',
   css: './client/css',
   audio: './client/audio',
   dist: './dist'
@@ -29,7 +30,8 @@ gulp.task('copy', (cb) => {
     gulp.src([
       `${paths.js}/reconnecting-websocket.min.js`,
       `${paths.src}/*`,
-      `!${paths.src}/*.html`
+      `!${paths.src}/*.html`,
+      `${paths.partials}/*`,
     ]),
     copy(paths.dist, {prefix: 1}),
     gulp.dest(paths.dist)

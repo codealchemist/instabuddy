@@ -21,7 +21,7 @@ const openGraph = {
   image: 'https://instabuddy.herokuapp.com/android-chrome-256x256.png',
   proxiedImage: 'https://instabuddy.herokuapp.com/android-chrome-256x256.png',
   title: 'InstaBuddy',
-  url: 'http://instabuddy.tk',
+  url: 'https://instabuddy.herokuapp.com',
   description: 'Instant button generator.'
 }
 
@@ -88,7 +88,7 @@ function setRoutes (localAudio = false) {
   app.get('/channel/:id', (req, res) => {
     const id = req.params.id
     console.log(`Opening channel: ${id}`)
-    res.render('index')
+    res.render('index', {openGraph})
   })
 
   app.get('/channel/:id/reset', (req, res) => {
@@ -118,14 +118,19 @@ function setRoutes (localAudio = false) {
 
       // Got button.
       const button = response.buttons[0]
-      res.render('button', {channel, button})
+      const buttonOpenGraph = Object.assign({}, openGraph, {
+        username: '',
+        title: button.name,
+        description: `InstaBuddy @${channel}`
+      })
+      res.render('button', {channel, button, openGraph: buttonOpenGraph})
     })
   })
 
   app.get('/channel/:id', (req, res) => {
     const id = req.params.id
     console.log(`Opening channel: ${id}`)
-    res.render('index')
+    res.render('index', {openGraph})
   })
 
   app.use((req, res) => {
