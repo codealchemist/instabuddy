@@ -15,6 +15,16 @@ const pathMap = {
 }
 const envPath = pathMap[env]
 
+// open graph defaults
+const openGraph = {
+  username: '@albertomiranda',
+  image: 'https://instabuddy.herokuapp.com/android-chrome-256x256.png',
+  proxiedImage: 'https://instabuddy.herokuapp.com/android-chrome-256x256.png',
+  title: 'InstaBuddy',
+  url: 'http://instabuddy.tk',
+  description: 'Instant button generator.'
+}
+
 function start (callback) {
   setRoutes()
 
