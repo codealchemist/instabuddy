@@ -31,7 +31,8 @@ class App {
       playbackErrorRepeated: new Message(`
         Playback failed several times. Maybe your browser does not support webm audio.
       `, {type: 'error'}),
-      clipboardCopyOk: new Message('Copied to clipboard!', {type: 'success'})
+      clipboardCopyOk: new Message('Copied to clipboard!', {type: 'success'}),
+      noAudioPlayback: new Message('Audio playback is not supported on your browser.', {type: 'error'})
     }
     this.playing = false
     this.recording = false
@@ -56,7 +57,8 @@ class App {
 
     // Check for playback support.
     if (!this.supportsWebm()) {
-      this.handleError('noAudioPlayback')
+      // this.handleError('noAudioPlayback')
+      this.alert('noAudioPlayback')
     }
   }
 
@@ -263,6 +265,12 @@ class App {
     let src = this.audioCollection[id].src
     this.$audio.src = src
 
+    setTimeout(() => {
+      log('playing stopped')
+      $el.removeClass('playing')
+      this.playing = false
+    }, this.recordingTime)
+
     // Start playback.
     try {
       this.$audio
@@ -286,12 +294,6 @@ class App {
       log(`ERROR PLAYING '${id}': ${src}`, e)
     }
     this.sendPlay(id, src)
-
-    setTimeout(() => {
-      log('playing stopped')
-      $el.removeClass('playing')
-      this.playing = false
-    }, this.recordingTime)
   }
 
   sendPlay (id, src) {
