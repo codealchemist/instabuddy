@@ -291,6 +291,7 @@ class App {
 
   removeButton (event, id) {
     event.stopPropagation()
+    if (!confirm('Delete this InstantButton?')) return
     const $button = new El(`#btn-${id}`)
     $button.remove()
 

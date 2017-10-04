@@ -5,8 +5,7 @@
   "main": "server/index.js",
   "scripts": {
     "test": "standard-focus",
-    "start": "node server",
-    "mongo": "mongod -f mongo.conf"
+    "start": "node server"
   },
   "repository": {
     "type": "git",
