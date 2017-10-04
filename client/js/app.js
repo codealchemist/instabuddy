@@ -58,7 +58,7 @@ class App {
     // Check for playback support.
     if (!this.supportsWebm()) {
       // this.handleError('noAudioPlayback')
-      this.alert.noAudioPlayback.show()
+      this.alerts.noAudioPlayback.show()
     }
   }
 
