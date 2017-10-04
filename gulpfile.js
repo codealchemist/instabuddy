@@ -29,6 +29,7 @@ gulp.task('copy', (cb) => {
   return pump([
     gulp.src([
       `${paths.js}/reconnecting-websocket.min.js`,
+      `${paths.js}/prophet.js.map`,
       `${paths.src}/*`,
       `!${paths.src}/*.html`,
       `${paths.partials}/*`,

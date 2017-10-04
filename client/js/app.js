@@ -26,20 +26,26 @@ class App {
       notSupported: 'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)',
       noAudioPlayback: 'Audio playback is not supported on your browser. Please, try with latest Chrome or Firefox :)'
     }
+    this.alerts = {
+      playbackError: new Message('Oops, playback failed.', {type: 'error'}),
+      playbackErrorRepeated: new Message(`
+        Playback failed several times. Maybe your browser does not support webm audio.
+      `, {type: 'error'}),
+      clipboardCopyOk: new Message('Copied to clipboard!', {type: 'success'})
+    }
     this.playing = false
     this.recording = false
     this.connected = false
+    this.playbackFailedCount = 0
     this.mode = mode
 
+    this.init()
+  }
+
+  init () {
     if (this.mode === 'normal') {
       this.initRecording()
       this.initClipboard()
-    }
-
-    // Check for websockets support.
-    if (! 'WebSocket' in window) {
-      alert(this.messages.noWebSocketSupport)
-      return
     }
 
     // Connect to socket server, set event handlers and get current channel.
@@ -47,6 +53,15 @@ class App {
       this.events = new InstabuddyEvents(this)
       if (this.mode !== 'standalone') this.getChannel()
     })
+
+    // Check for playback support.
+    if (!this.supportsWebm()) {
+      // this.handleError('noAudioPlayback')
+    }
+  }
+
+  supportsWebm () {
+    return !!this.$audio.canPlayType('audio/webm')
   }
 
   initClipboard() {
@@ -56,7 +71,7 @@ class App {
     // Clipboard supported!
     const clipboard = new Clipboard('i.share')
     clipboard.on('success', (e) => {
-      alert('Copied to Clipboard!')
+      this.alerts.clipboardCopyOk.show()
     })
   }
 
@@ -120,6 +135,12 @@ class App {
   }
 
   connect (callback) {
+    // Check for websockets support.
+    if (! 'WebSocket' in window) {
+      alert(this.messages.noWebSocketSupport)
+      return
+    }
+
     let wsProto = 'ws'
     if (location.protocol === 'https:') wsProto = 'wss'
     this.ws = new ReconnectingWebSocket(`${wsProto}://${location.host}`)
@@ -248,7 +269,18 @@ class App {
         .play()
         .then(() => {})
         .catch(e => {
-          this.handleError('noAudioPlayback', e)
+          log(e)
+
+          // Safari throws this error but plays OK.
+          if (e.message === 'The operation is not supported.') return
+
+          if (this.playbackFailedCount > 3) {
+            this.alerts.playbackErrorRepeated.show()
+            return
+          }
+
+          this.alerts.playbackError.show()
+          this.playbackFailedCount += 1
         })
     } catch (e) {
       log(`ERROR PLAYING '${id}': ${src}`, e)
