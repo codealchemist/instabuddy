@@ -36,7 +36,13 @@ class InstabuddyEvents {
   play ({type, data, error}) {
     const {channel, id, src} = data
     this.log(`BROADCAST PLAY @${channel}:`, src)
+
+    // TODO: Filter channels on the backend.
+    // Play audio for current channel only.
     if (this.app.channel !== channel) return
+
+    // Don't interrupt recording nor playback.
+    if (this.app.playing || this.app.recording) return
 
     const $el = new El(`#btn-${id}`)
     if (!$el.exists()) return

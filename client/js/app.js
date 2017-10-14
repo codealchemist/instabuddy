@@ -28,6 +28,7 @@ class App {
     }
     this.alerts = {
       playbackError: new Message('Oops, playback failed.', {type: 'error'}),
+      playbackNotFoundError: new Message('Error: Audio source not found.', {type: 'error'}),
       playbackErrorRepeated: new Message(`
         Playback failed several times. Maybe your browser does not support webm audio.
       `, {type: 'error'}),
@@ -37,7 +38,6 @@ class App {
     this.playing = false
     this.recording = false
     this.connected = false
-    this.playbackFailedCount = 0
     this.mode = mode
 
     this.init()
@@ -265,35 +265,42 @@ class App {
     let src = this.audioCollection[id].src
     this.$audio.src = src
 
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       log('playing stopped')
       $el.removeClass('playing')
       this.playing = false
     }, this.recordingTime)
 
     // Start playback.
+    this.sendPlay(id, src)
     try {
       this.$audio
         .play()
         .then(() => {})
         .catch(e => {
-          log(e)
+          log('Playback ERROR:', e)
 
           // Safari throws this error but plays OK.
           if (e.message === 'The operation is not supported.') return
 
-          if (this.playbackFailedCount > 3) {
-            this.alerts.playbackErrorRepeated.show()
+          if (e.message === 'Failed to load because no supported source was found.') {
+            this.handlePlaybackError('playbackNotFoundError', $el, timeoutId)
             return
           }
 
-          this.alerts.playbackError.show()
-          this.playbackFailedCount += 1
+          this.handlePlaybackError('playbackError', $el, timeoutId)
         })
     } catch (e) {
       log(`ERROR PLAYING '${id}': ${src}`, e)
+      this.handlePlaybackError('playbackError', $el, timeoutId)
     }
-    this.sendPlay(id, src)
+  }
+
+  handlePlaybackError (alerId, $el, timeoutId) {
+    this.alerts[alerId].show()
+    clearTimeout(timeoutId)
+    $el.removeClass('playing')
+    this.playing = false
   }
 
   sendPlay (id, src) {
