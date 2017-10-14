@@ -1,6 +1,6 @@
 {
   "name": "instabuddy",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "Instant button generator.",
   "main": "server/index.js",
   "scripts": {
