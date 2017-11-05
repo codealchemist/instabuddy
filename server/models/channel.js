@@ -82,6 +82,14 @@ class Channel {
       callback
     )
   }
+
+    getRandomButton (name, callback) {
+      this.collection.aggregate([
+        { $match: { name: 'yeah' } },
+        { $unwind: "$buttons" },
+        { $sample: { size: 1 } }
+      ], callback)
+    }
 }
 
 const channel = new Channel()

@@ -23,7 +23,45 @@ function removeButton ({broadcast, send, ws, message}) {
   })
 }
 
+function playRandom ({broadcast, send, ws, message}) {
+  if (!message.channel) {
+    console.log('ERROR: Invalid data for "playRandom" event:', message)
+    return
+  }
+
+  const {channel} = message
+  console.log(`Getting RANDOM button @${channel}...`)
+  channelModel.getRandomButton(channel, (err, response) => {
+    if (err) {
+      console.log(`ERROR getting random button on channel '${channel}':`, err)
+      return
+    }
+
+    // console.log('RESPONSE', response)
+    const button = response[0].buttons
+    console.log('GOT RANDOM button:', button)
+    const message = {
+      type: 'play',
+      data: {
+        channel,
+        src: button.src,
+        id: button.id
+      }
+    }
+    broadcast(ws, message)
+  })
+}
+
 function play ({broadcast, send, ws, message}) {
+  if (
+    !message.data ||
+    !message.data.channel ||
+    !message.data.src ||
+    !message.data.id
+  ) {
+    console.log('ERROR: Invalid data for "play" event:', message)
+    return
+  }
   console.log(`PLAY @${message.data.channel}:`, message.data.src)
 
   // Get source URL.
@@ -57,4 +95,4 @@ function play ({broadcast, send, ws, message}) {
   broadcast(ws, message)
 }
 
-module.exports = { getChannel, removeButton, play }
+module.exports = { getChannel, removeButton, play, playRandom }
