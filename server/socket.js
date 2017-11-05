@@ -40,7 +40,7 @@ function setEvents () {
 
     ws.on('message', (data) => {
       const message = JSON.parse(data)
-      // log('MSG:', message)
+      log('MSG:', message)
       if (typeof events[message.type] === 'function') {
         events[message.type]({broadcast, send, ws, message})
       }
