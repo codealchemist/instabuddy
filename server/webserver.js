@@ -140,7 +140,7 @@ function setRoutes (localAudio = false) {
   })
 
   app.post('/slack', (req, res) => {
-    console.log('SLACK:', req.params)
+    console.log('SLACK:', req.body)
     res.json({
       "response_type": "in_channel",
       "text": "Hey! Let's rock!",
