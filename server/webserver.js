@@ -22,7 +22,8 @@ const openGraph = {
   proxiedImage: 'https://instabuddy.herokuapp.com/android-chrome-256x256.png',
   title: 'InstaBuddy',
   url: 'https://instabuddy.herokuapp.com',
-  description: 'Instant button generator.'
+  description: 'Instant button generator.',
+  audioUrl: ''
 }
 
 function start (callback) {
@@ -127,7 +128,8 @@ function setRoutes (localAudio = false) {
         username: '',
         url: `${openGraph.url}/channel/${channel}/play/${buttonId}`,
         title: button.name,
-        description: `InstaBuddy @${channel}`
+        description: `InstaBuddy @${channel}`,
+        audioUrl: button.src
       })
       res.render('button', {channel, button, openGraph: buttonOpenGraph})
     })
