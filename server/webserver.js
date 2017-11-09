@@ -145,14 +145,53 @@ function setRoutes (localAudio = false) {
 
   app.post('/slack', (req, res) => {
     console.log('SLACK:', req.body)
-    res.json({
-      "response_type": "in_channel",
-      "text": "Hey! Let's rock!",
-      "attachments": [
-        {
-          "text": "Hey hey hey!"
-        }
-      ]
+    const {text, user_name} = req.body
+    const [channel, buttonName] = text.split('/')
+
+    channelModel.getButtonByName({channel, buttonName}, (err, response) => {
+      if (err) {
+        console.log(`ERROR playing standalone button @${channel}: ${buttonId}`, err)
+        res.json({
+          "text": `Oops, I found an error with '${channel}/${buttonName}', sorry!`,
+          "attachments": [
+            {
+              "text": err.message || err
+            }
+          ]
+        })
+        return
+      }
+
+      // Empty.
+      if (!response.buttons || !response.buttons.length) {
+        console.log(`CAN'T PLAY ${buttonId} @${channel}, document not found`)
+        res.json({
+          "text": `Oops, I didn't find '${channel}/${buttonName}', sorry!`
+        })
+        return
+      }
+
+      // Got button.
+      const button = response.buttons[0]
+      const buttonId = button.id
+      const buttonOpenGraph = Object.assign({}, openGraph, {
+        username: user_name,
+        url: `${openGraph.url}/channel/${channel}/play/${buttonId}`,
+        title: button.name,
+        description: `InstaBuddy @${channel}`
+      })
+
+      res.json({
+        "response_type": "in_channel",
+        title: `InstaBuddy @${channel}/${buttonName}`,
+        "text": button.src,
+        "unfurl_links": true,
+        "attachments": [
+          {
+            "text": `${user_name} says '${buttonName}'`
+          }
+        ]
+      })
     })
   })
 
