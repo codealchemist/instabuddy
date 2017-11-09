@@ -174,21 +174,16 @@ function setRoutes (localAudio = false) {
       // Got button.
       const button = response.buttons[0]
       const buttonId = button.id
-      const buttonOpenGraph = Object.assign({}, openGraph, {
-        username: user_name,
-        url: `${openGraph.url}/channel/${channel}/play/${buttonId}`,
-        title: button.name,
-        description: `InstaBuddy @${channel}`
-      })
+      const buttonUrl = `${openGraph.url}/channel/${channel}/play/${buttonId}`
 
       res.json({
         "response_type": "in_channel",
         title: `InstaBuddy @${channel}/${buttonName}`,
-        "text": button.src,
+        "text": `<${buttonUrl}>`,
         "unfurl_links": true,
         "attachments": [
           {
-            "text": `${user_name} says '${buttonName}'`
+            "text": `@${user_name} says '${buttonName}'`
           }
         ]
       })
