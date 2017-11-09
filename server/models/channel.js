@@ -83,13 +83,27 @@ class Channel {
     )
   }
 
-    getRandomButton (name, callback) {
-      this.collection.aggregate([
-        { $match: { name: 'yeah' } },
-        { $unwind: "$buttons" },
-        { $sample: { size: 1 } }
-      ], callback)
-    }
+  getButtonByName ({channel, buttonName}, callback) {
+    if (!channel || !buttonName) return
+
+    this.collection.findOne(
+      { name: channel.toString() },
+      {
+        buttons: {
+          $elemMatch: {name: buttonName}
+        }
+      },
+      callback
+    )
+  }
+
+  getRandomButton (name, callback) {
+    this.collection.aggregate([
+      { $match: { name: 'yeah' } },
+      { $unwind: "$buttons" },
+      { $sample: { size: 1 } }
+    ], callback)
+  }
 }
 
 const channel = new Channel()
