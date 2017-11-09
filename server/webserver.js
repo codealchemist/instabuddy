@@ -139,6 +139,19 @@ function setRoutes (localAudio = false) {
     res.render('index', {openGraph})
   })
 
+  app.post('/slack', (req, res) => {
+    console.log('SLACK:', req.params)
+    res.json({
+      "response_type": "in_channel",
+      "text": "Hey! Let's rock!",
+      "attachments": [
+        {
+          "text": "Hey hey hey!"
+        }
+      ]
+    })
+  })
+
   app.use((req, res) => {
     res.sendStatus(404)
   })
