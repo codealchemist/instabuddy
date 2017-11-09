@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const express = require('express')
 const httpsEnforcer = require('https-enforcer')
+const bodyParser = require('body-parser')
 const channelModel = require('./models/channel')
 const storageAdapter = require('./storage-adapter')
 
@@ -86,6 +87,9 @@ function setRoutes (localAudio = false) {
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html')
 
+  app.use(bodyParser.json()) // support json encoded bodies
+  app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
+
   app.get('/channel/:id', (req, res) => {
     const id = req.params.id
     console.log(`Opening channel: ${id}`)
@@ -139,6 +143,53 @@ function setRoutes (localAudio = false) {
     const id = req.params.id
     console.log(`Opening channel: ${id}`)
     res.render('index', {openGraph})
+  })
+
+  app.post('/slack', (req, res) => {
+    console.log('SLACK:', req.body)
+    const {text, user_name} = req.body
+    const [channel, buttonName] = text.split('/')
+
+    channelModel.getButtonByName({channel, buttonName}, (err, response) => {
+      if (err) {
+        console.log(`ERROR playing standalone button @${channel}: ${buttonId}`, err)
+        res.json({
+          "text": `Oops, I found an error with '${channel}/${buttonName}', sorry!`,
+          "attachments": [
+            {
+              "text": err.message || err
+            }
+          ]
+        })
+        return
+      }
+
+      // Empty.
+      if (!response.buttons || !response.buttons.length) {
+        console.log(`CAN'T PLAY ${buttonId} @${channel}, document not found`)
+        res.json({
+          "text": `Oops, I didn't find '${channel}/${buttonName}', sorry!`
+        })
+        return
+      }
+
+      // Got button.
+      const button = response.buttons[0]
+      const buttonId = button.id
+      const buttonUrl = `${openGraph.url}/channel/${channel}/play/${buttonId}`
+
+      res.json({
+        "response_type": "in_channel",
+        title: `InstaBuddy @${channel}/${buttonName}`,
+        "text": `<${buttonUrl}>`,
+        "unfurl_links": true,
+        "attachments": [
+          {
+            "text": `@${user_name} says '${buttonName}'`
+          }
+        ]
+      })
+    })
   })
 
   app.use((req, res) => {
