@@ -6,18 +6,20 @@
 <meta property="og:image" content="<%= openGraph.image %>" />
 <meta property="og:description" content="<%= openGraph.description %>" />
 <meta property="og:audio" content="<%= openGraph.audioUrl %>" />
-<meta property="og:audio:type" content="audio/webm" />
+<meta property="og:audio:type" content="audio/vnd.facebook.bridge" />
+<meta property="music:preview_url:secure_url" content="<%= openGraph.audioUrl %>" />
+<meta property="music:preview_url:type" content="audio/webm" />
 <link rel="image_src" href="<%= openGraph.image %>" />
 
 <!-- Twitter. -->
-<meta name="twitter:card" content="player">
+<meta name="twitter:card" content="audio">
 <meta name="twitter:creator" content="<%= openGraph.username %>">
 <meta name="twitter:title" content="<%= openGraph.title %>">
 <meta name="twitter:description" content="<%= openGraph.description %>">
 <meta name="twitter:image" content="<%= openGraph.image %>">
 <meta name="twitter:url" content="<%= openGraph.url %>">
 <meta name="twitter:player" content="<%= openGraph.url %>">
-<meta name="twitter:player:width" content="320">
-<meta name="twitter:player:height" content="200">
+<meta name="twitter:player:width" content="584">
+<meta name="twitter:player:height" content="504">
 <meta name="twitter:player:stream" content="<%= openGraph.audioUrl %>">
 <meta name="twitter:player:stream:content_type" content="audio/webm">
