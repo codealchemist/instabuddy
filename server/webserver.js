@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const express = require('express')
 const httpsEnforcer = require('https-enforcer')
+const bodyParser = require('body-parser')
 const channelModel = require('./models/channel')
 const storageAdapter = require('./storage-adapter')
 
@@ -84,6 +85,9 @@ function setRoutes (localAudio = false) {
   app.set('views', path.resolve(envPath))
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html')
+
+  app.use(bodyParser.json()) // support json encoded bodies
+  app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
 
   app.get('/channel/:id', (req, res) => {
     const id = req.params.id
