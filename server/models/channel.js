@@ -84,7 +84,7 @@ class Channel {
   }
 
   getButtonByName ({channel, buttonName}, callback) {
-    if (!channel || !buttonId) return
+    if (!channel || !buttonName) return
 
     this.collection.findOne(
       { name: channel.toString() },
