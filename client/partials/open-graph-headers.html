@@ -2,7 +2,7 @@
 <meta property="og:title" content="<%= openGraph.title %>" />
 <meta property="og:site_name" content="<%= openGraph.title %>"/>
 <meta property="og:url" content="<%= openGraph.url %>" />
-<meta property="og:type" content="article" />
+<meta property="og:type" content="music.song" />
 <meta property="og:image" content="<%= openGraph.image %>" />
 <meta property="og:description" content="<%= openGraph.description %>" />
 <meta property="og:audio" content="<%= openGraph.audioUrl %>" />
@@ -10,12 +10,14 @@
 <link rel="image_src" href="<%= openGraph.image %>" />
 
 <!-- Twitter. -->
-<meta name="twitter:card" content="photo">
+<meta name="twitter:card" content="player">
 <meta name="twitter:creator" content="<%= openGraph.username %>">
 <meta name="twitter:title" content="<%= openGraph.title %>">
 <meta name="twitter:description" content="<%= openGraph.description %>">
 <meta name="twitter:image" content="<%= openGraph.image %>">
 <meta name="twitter:url" content="<%= openGraph.url %>">
-<meta name="twitter:player" content="<%= openGraph.audioUrl %>">
+<meta name="twitter:player" content="<%= openGraph.url %>">
+<meta name="twitter:player:width" content="320">
+<meta name="twitter:player:height" content="200">
 <meta name="twitter:player:stream" content="<%= openGraph.audioUrl %>">
 <meta name="twitter:player:stream:content_type" content="audio/webm">
