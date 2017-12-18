@@ -14,6 +14,7 @@ function start (app, callback) {
   })
 
   setEvents()
+  return wss
 }
 
 function startWithApp (app, callback) {

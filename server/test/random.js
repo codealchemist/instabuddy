@@ -1,3 +1,3 @@
-const instabuddyConnector = require('./connector')
+const instabuddyConnector = require('../connector')
 
 instabuddyConnector.playRandom('yeah')

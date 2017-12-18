@@ -5,6 +5,7 @@ const httpsEnforcer = require('https-enforcer')
 const bodyParser = require('body-parser')
 const channelModel = require('./models/channel')
 const storageAdapter = require('./storage-adapter')
+const instabuddyConnector = require('./connector')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -134,6 +135,33 @@ function setRoutes (localAudio = false) {
         description: `InstaBuddy @${channel}`
       })
       res.render('button', {channel, button, openGraph: buttonOpenGraph})
+    })
+  })
+
+  app.get('/channel/:channel/remote-play/:buttonId', (req, res) => {
+    const {channel, buttonId} = req.params
+    console.log(`REMOTE-PLAY from CHANNEL '${channel}':`, buttonId)
+    channelModel.getButton({channel, buttonId}, (err, response) => {
+      if (err) {
+        console.log(`ERROR remote-playing standalone button @${channel}: ${buttonId}`, err)
+        return
+      }
+
+      // Empty.
+      if (!response.buttons || !response.buttons.length) {
+        console.log(`CAN'T REMOTE PLAY ${buttonId} @${channel}, document not found`)
+        res.render('button-not-found', {channel})
+        return
+      }
+
+      // Got button.
+      const button = response.buttons[0]
+      const {id, src} = button
+
+      // Remote playback using socket.
+      instabuddyConnector.play({channel, id, src})
+
+      res.json(button)
     })
   })
 
