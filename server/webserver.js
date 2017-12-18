@@ -165,6 +165,14 @@ function setRoutes (localAudio = false) {
     })
   })
 
+  app.get('/channel/:channel/remote-random', (req, res) => {
+    const {channel} = req.params
+    console.log(`REMOTE-RANDOM-PLAY from CHANNEL '${channel}'`)
+
+    instabuddyConnector.playRandom(channel)
+    res.send(`RANDOM playback @${channel}`)
+  })
+
   app.get('/channel/:id', (req, res) => {
     const id = req.params.id
     console.log(`Opening channel: ${id}`)
