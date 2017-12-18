@@ -1,7 +1,7 @@
 const WebSocket = require('ws')
 
 let url = 'ws://localhost:3000'
-if (process.env.PROD) url = 'wss://instabuddy.herokuapp.com'
+if (process.env === 'prod') url = 'wss://instabuddy.herokuapp.com'
 console.log(`Socket URL: ${url}`)
 const ws = new WebSocket(url)
 
