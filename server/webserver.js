@@ -31,7 +31,14 @@ function start (callback) {
   setRoutes()
 
   if (typeof callback !== 'function') return listen()
-  callback(app)
+  callback(app, () => {
+    // Socket is ready.
+    instabuddyConnector
+      .onReady(() => {
+        console.log('InstabuddyConnector is connected.')
+      })
+      .connect()
+  })
 }
 
 function setLocalAudioRoutes () {

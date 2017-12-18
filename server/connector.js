@@ -2,15 +2,17 @@ const WebSocket = require('ws')
 
 let url = 'ws://localhost:3000'
 if (process.env.ENV === 'prod') url = 'wss://instabuddy.herokuapp.com'
-console.log(`Socket URL: ${url}`)
-const ws = new WebSocket(url)
+console.log(`InstabuddyConnector: Socket URL: ${url}`)
 
 class InstabuddyConnector {
   constructor () {
     this.ready = false
     this.onReadyCallback = null
+  }
 
-    ws.on('open', () => {
+  connect () {
+    this.ws = new WebSocket(url)
+    this.ws.on('open', () => {
       this.ready = true
       if (this.onReadyCallback) {
         this.onReadyCallback()
@@ -24,6 +26,7 @@ class InstabuddyConnector {
     if (this.ready) {
       callback()
     }
+    return this
   }
 
   play ({channel, id, src}) {
@@ -41,7 +44,7 @@ class InstabuddyConnector {
       data: { channel, id, src }
     }
     const data = JSON.stringify(message)
-    ws.send(data)
+    this.ws.send(data)
   }
 
   playRandom (channel) {
@@ -59,7 +62,7 @@ class InstabuddyConnector {
       channel: channel
     }
     const data = JSON.stringify(message)
-    ws.send(data)
+    this.ws.send(data)
   }
 }
 

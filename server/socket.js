@@ -14,7 +14,7 @@ function start (app, callback) {
   })
 
   setEvents()
-  return wss
+  if (typeof callback === 'function') callback(wss)
 }
 
 function startWithApp (app, callback) {
@@ -31,6 +31,8 @@ function startWithApp (app, callback) {
       WEB SERVER listening on port ${port}.
       SOCKET attached.
     `)
+
+    if (typeof callback === 'function') callback(wss)
   })
 }
 
