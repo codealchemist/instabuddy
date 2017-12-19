@@ -26,6 +26,7 @@ class InstabuddyConnector {
         if (!this.ready) return
         console.log('InstabuddyConnector: Closed.')
         this.ready = false
+        this.ws.terminate()
         this.reconnect()
       }
     }, 2000)
