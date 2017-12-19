@@ -88,6 +88,42 @@ function setRoutes (localAudio = false) {
   }
 
   app.use(redirectToHeroku)
+
+  app.get('/channel/:channel/remote-play/:buttonId', (req, res) => {
+    const {channel, buttonId} = req.params
+    console.log(`REMOTE-PLAY from CHANNEL '${channel}':`, buttonId)
+    channelModel.getButton({channel, buttonId}, (err, response) => {
+      if (err) {
+        console.log(`ERROR remote-playing standalone button @${channel}: ${buttonId}`, err)
+        return
+      }
+
+      // Empty.
+      if (!response.buttons || !response.buttons.length) {
+        console.log(`CAN'T REMOTE PLAY ${buttonId} @${channel}, document not found`)
+        res.render('button-not-found', {channel})
+        return
+      }
+
+      // Got button.
+      const button = response.buttons[0]
+      const {id, src} = button
+
+      // Remote playback using socket.
+      instabuddyConnector.play({channel, id, src})
+
+      res.json(button)
+    })
+  })
+
+  app.get('/channel/:channel/remote-random', (req, res) => {
+    const {channel} = req.params
+    console.log(`REMOTE-RANDOM-PLAY from CHANNEL '${channel}'`)
+
+    instabuddyConnector.playRandom(channel)
+    res.send(`RANDOM playback @${channel}`)
+  })
+
   app.use(httpsEnforcer)
   app.use('/', express.static(staticPath))
   app.set('views', path.resolve(envPath))
@@ -143,41 +179,6 @@ function setRoutes (localAudio = false) {
       })
       res.render('button', {channel, button, openGraph: buttonOpenGraph})
     })
-  })
-
-  app.get('/channel/:channel/remote-play/:buttonId', (req, res) => {
-    const {channel, buttonId} = req.params
-    console.log(`REMOTE-PLAY from CHANNEL '${channel}':`, buttonId)
-    channelModel.getButton({channel, buttonId}, (err, response) => {
-      if (err) {
-        console.log(`ERROR remote-playing standalone button @${channel}: ${buttonId}`, err)
-        return
-      }
-
-      // Empty.
-      if (!response.buttons || !response.buttons.length) {
-        console.log(`CAN'T REMOTE PLAY ${buttonId} @${channel}, document not found`)
-        res.render('button-not-found', {channel})
-        return
-      }
-
-      // Got button.
-      const button = response.buttons[0]
-      const {id, src} = button
-
-      // Remote playback using socket.
-      instabuddyConnector.play({channel, id, src})
-
-      res.json(button)
-    })
-  })
-
-  app.get('/channel/:channel/remote-random', (req, res) => {
-    const {channel} = req.params
-    console.log(`REMOTE-RANDOM-PLAY from CHANNEL '${channel}'`)
-
-    instabuddyConnector.playRandom(channel)
-    res.send(`RANDOM playback @${channel}`)
   })
 
   app.get('/channel/:id', (req, res) => {
