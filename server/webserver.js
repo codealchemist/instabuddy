@@ -33,11 +33,7 @@ function start (callback) {
   if (typeof callback !== 'function') return listen()
   callback(app, () => {
     // Socket is ready.
-    instabuddyConnector
-      .onReady(() => {
-        console.log('InstabuddyConnector is connected.')
-      })
-      .connect()
+    instabuddyConnector.connect()
   })
 }
 

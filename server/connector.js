@@ -2,7 +2,6 @@ const WebSocket = require('ws')
 
 let url = 'ws://localhost:3000'
 if (process.env.ENV === 'prod') url = 'wss://instabuddy.herokuapp.com'
-console.log(`InstabuddyConnector: Socket URL: ${url}`)
 
 class InstabuddyConnector {
   constructor () {
@@ -10,11 +9,11 @@ class InstabuddyConnector {
     this.onReadyCallback = null
 
     this.interval = setInterval(() => {
-      console.log(`--- WebSocket.readyState: ${this.ws.readyState} / open: ${this.ws.OPEN}`)
+      // console.log(`--- WebSocket.readyState: ${this.ws.readyState} / open: ${this.ws.OPEN}`)
       if (this.ws.readyState !== this.ws.OPEN) {
         if (!this.ready) return
-        console.log('InstabuddyConnector: Closed.')
-        console.log('InstabuddyConnector: Reconnect...')
+        this.log('Closed.')
+        this.log('Reconnect...')
         this.disconnect()
         this.connect()
       }
@@ -25,7 +24,7 @@ class InstabuddyConnector {
     this.ws = new WebSocket(url)
     this.ws.on('open', () => {
       this.ready = true
-      console.log('InstabuddyConnector: Connected.')
+      this.log('Connected.')
       if (this.onReadyCallback) {
         this.onReadyCallback()
       }
@@ -48,14 +47,14 @@ class InstabuddyConnector {
 
   play ({channel, id, src}) {
     if (!this.ready) {
-      console.log('Delayed playback, waiting for WS to connect...')
+      this.log('Delayed playback, waiting for WS to connect...')
       setTimeout(() => {
         this.play({channel, id, src})
       }, 250)
       return
     }
 
-    console.log('Play:', {channel, id, src})
+    this.log('Play:', {channel, id, src})
     const message = {
       type: 'play',
       data: { channel, id, src }
@@ -66,20 +65,24 @@ class InstabuddyConnector {
 
   playRandom (channel) {
     if (!this.ready) {
-      console.log('Delayed random playback, waiting for WS to connect...')
+      this.log('Delayed random playback, waiting for WS to connect...')
       setTimeout(() => {
         this.playRandom(channel)
       }, 250)
       return
     }
 
-    console.log(`Random play @${channel}`)
+    this.log(`Random play @${channel}`)
     const message = {
       type: 'playRandom',
       channel: channel
     }
     const data = JSON.stringify(message)
     this.ws.send(data)
+  }
+
+  log () {
+    console.log('[ InstabuddyConnector ]-->', ...arguments)
   }
 }
 
