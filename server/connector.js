@@ -21,7 +21,7 @@ class InstabuddyConnector {
     })
 
     setInterval(() => {
-      console.log('--- WebSocket.readyState:', this.ws.readyState)
+      console.log(`--- WebSocket.readyState: ${this.ws.readyState} / open: ${this.ws.OPEN}`)
       if (this.ws.readyState !== this.ws.OPEN) {
         if (!this.ready) return
         console.log('InstabuddyConnector: Closed.')
