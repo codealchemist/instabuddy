@@ -8,6 +8,17 @@ class InstabuddyConnector {
   constructor () {
     this.ready = false
     this.onReadyCallback = null
+
+    this.interval = setInterval(() => {
+      console.log(`--- WebSocket.readyState: ${this.ws.readyState} / open: ${this.ws.OPEN}`)
+      if (this.ws.readyState !== this.ws.OPEN) {
+        if (!this.ready) return
+        console.log('InstabuddyConnector: Closed.')
+        console.log('InstabuddyConnector: Reconnect...')
+        this.disconnect()
+        this.connect()
+      }
+    }, 2000)
   }
 
   connect () {
@@ -19,22 +30,11 @@ class InstabuddyConnector {
         this.onReadyCallback()
       }
     })
-
-    setInterval(() => {
-      console.log(`--- WebSocket.readyState: ${this.ws.readyState} / open: ${this.ws.OPEN}`)
-      if (this.ws.readyState !== this.ws.OPEN) {
-        if (!this.ready) return
-        console.log('InstabuddyConnector: Closed.')
-        this.ready = false
-        this.ws.terminate()
-        this.reconnect()
-      }
-    }, 2000)
   }
 
-  reconnect () {
-    console.log('InstabuddyConnector: Reconnect...')
-    this.ws = new WebSocket(url)
+  disconnect () {
+    this.ready = false
+    this.ws.terminate()
   }
 
   onReady (callback) {
