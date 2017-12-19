@@ -14,14 +14,20 @@ class InstabuddyConnector {
     this.ws = new WebSocket(url)
     this.ws.on('open', () => {
       this.ready = true
+      console.log('InstabuddyConnector: Connected.')
       if (this.onReadyCallback) {
         this.onReadyCallback()
       }
     })
 
-    this.ws.on('close', () => {
-      this.reconnect()
-    })
+    setInterval(() => {
+      if (WebSocket.readyState === WebSocket.CLOSED) {
+        if (!this.ready) return
+        console.log('InstabuddyConnector: Closed.')
+        this.ready = false
+        this.reconnect()
+      }
+    }, 2000)
   }
 
   reconnect () {
