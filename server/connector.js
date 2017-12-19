@@ -18,6 +18,15 @@ class InstabuddyConnector {
         this.onReadyCallback()
       }
     })
+
+    this.ws.on('close', () => {
+      this.reconnect()
+    })
+  }
+
+  reconnect () {
+    console.log('InstabuddyConnector: Reconnect...')
+    this.ws = new WebSocket(url)
   }
 
   onReady (callback) {
