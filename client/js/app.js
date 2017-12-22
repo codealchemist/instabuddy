@@ -255,7 +255,7 @@ class App {
   }
 
   play (id) {
-    if (this.playing) return
+    if (this.playing || this.recording) return
 
     log('play', id)
     this.playing = true
