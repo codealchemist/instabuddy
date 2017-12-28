@@ -74,6 +74,11 @@ function play ({broadcast, send, ws, message}) {
         return
       }
 
+      if (!response) {
+        console.log(`Unable to get button '${id}' @${channel}`)
+        return
+      }
+
       const buttons = response.buttons
 
       // Empty.
