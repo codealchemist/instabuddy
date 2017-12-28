@@ -177,10 +177,19 @@ function setRoutes (localAudio = false) {
     })
   })
 
-  app.get('/channel/:id', (req, res) => {
+  app.get('/channel/:id/create', (req, res) => {
     const id = req.params.id
-    console.log(`Opening channel: ${id}`)
-    res.render('index', {openGraph})
+    console.log(`Creating channel: ${id}`)
+    channelModel.create(id, () => {
+      console.log(`Channel created: ${id}`)
+
+      const channelOpenGraph = Object.assign({}, openGraph, {
+        title: `InstaBuddy @${id}`,
+        url: `${openGraph.url}/channel/${id}`,
+      })
+      res.render('index', {openGraph: channelOpenGraph})
+      return
+    })
   })
 
   app.post('/slack', (req, res) => {

@@ -24,7 +24,8 @@ class Channel {
     this.collection.save({
       name,
       created: new Date(),
-      updated: new Date()
+      updated: new Date(),
+      buttons: []
     }, callback)
   }
 
