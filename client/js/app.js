@@ -247,7 +247,6 @@ class App {
   }
 
   saveButton (button) {
-    console.log('SAVE', button)
     fetch(button.src).then((response) => {
       response
         .arrayBuffer()
@@ -257,7 +256,6 @@ class App {
             name: button.name,
             channel: this.channel
           }
-          console.log('send binary, meta:', meta)
           this.sendBinary(buffer, meta)
         })
     })
@@ -320,7 +318,6 @@ class App {
   }
 
   download (event, id) {
-    console.log('download:', id)
     event.stopPropagation()
     event.preventDefault()
 
@@ -341,7 +338,6 @@ class App {
     clearTimeout(this.dragTimeout)
     this.$drop.show('flex')
 
-    // console.log('DRAG', e)
     this.dragging = true
     setTimeout(() => this.dragging = false, 70)
     return false
@@ -357,7 +353,6 @@ class App {
     e.preventDefault()
     e.stopPropagation()
 
-    // console.log('DRAG LEAVE')
     clearTimeout(this.dragTimeout)
     this.dragTimeout = setTimeout(() => this.$drop.hide(), 100)
     return false
@@ -366,33 +361,25 @@ class App {
   onDrop (e) {
     e.stopPropagation()
     e.preventDefault()
-    console.log('DROP', e)
     this.$drop.hide()
 
     if (e.dataTransfer.items) {
       const files = Array.from(e.dataTransfer.files)
 
       if (files.length === 0) {
-        console.log('No files available.')
+        log('No files available.')
         return
       }
 
       e.dataTransfer.dropEffect = 'copy'
-      console.log('FILES', files)
-
-      files.map((file) => {
-        console.log('FILE', file)
-        this.addDroppedAudio(file)
-      })
+      files.map(file => this.addDroppedAudio(file))
     }
     return false
   }
 
   addDroppedAudio (file) {
-    console.log('Add dropped audio...', file)
     // Check if it's audio.
     if (!file.type.match(/audio/)) {
-      console.error('Not audio.')
       this.alerts.notAudioFile.show()
       return
     }
@@ -401,8 +388,6 @@ class App {
     const blob = window.URL.createObjectURL(file)
     const audio = new Audio()
     audio.addEventListener('loadedmetadata', (metadata) => {
-      // console.log('METADATA', metadata)
-      console.log('DURATION (seconds)', audio.duration)
       // window.URL.revokeObjectURL(blob)
 
       // Time limit.
@@ -419,18 +404,6 @@ class App {
       this.saveButton(this.audioCollection[id])
     })
     audio.src = blob
-
-
-    // const reader = new FileReader()
-    // reader.onload = (data) => {
-    //   console.log('FILE READ OK', data)
-    // }
-    // reader.readAsDataURL(file)
-
-    // Check length.
-
-    // Add new button with file data.
-    console.log('Add new button with dropped audio!')
   }
 
   setDrop () {
@@ -485,13 +458,10 @@ class App {
   }
 
   getButtonLink (event, id) {
-    console.log('SHARE BUTTON', id)
     event.stopPropagation()
     event.preventDefault()
 
     const buttonUrl = `${this.url}/play/${id}`
-    console.log(buttonUrl)
-
   }
 
   addAudio(id, button) {
