@@ -47,7 +47,7 @@
   </head>
   <body onkeydown="app.onKey(event.keyCode)">
     <div id="error"></div>
-    <div id="background">
+    <div id="background" class="background">
       <div class="background-text">InstaBuddy</div>
     </div>
 
@@ -55,6 +55,11 @@
       <div id="add" class="btn add" onclick="app.addButton(event)">
         <p>+</p>
       </div>
+    </div>
+
+    <div id="drop" class="center background background-text">
+      DROP AUDIO <br />
+      📢
     </div>
 
     <audio></audio>

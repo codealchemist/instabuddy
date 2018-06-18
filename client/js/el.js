@@ -15,8 +15,8 @@ class El {
     return this.$el
   }
 
-  show () {
-    this.$el.style.display = 'block'
+  show (mode) {
+    this.$el.style.display = mode || 'block'
     return this
   }
 

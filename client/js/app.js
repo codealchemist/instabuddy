@@ -4,9 +4,12 @@ class App {
     this.$audio = document.querySelector('audio')
     this.$addButton = new El('#add')
     this.$error = new El('#error')
+    this.$drop = new El('#drop')
+    this.dragTimeout
     this.audioCollection = {}
     this.recorder = null
     this.recordingTime = 3000 // ms
+    this.dropAudioDurationLimit = this.recordingTime / 1000
     this.channel = this.getChannelName()
     this.url = location.href
     this.colors = [
@@ -33,7 +36,9 @@ class App {
         Playback failed several times. Maybe your browser does not support webm audio.
       `, {type: 'error'}),
       clipboardCopyOk: new Message('Copied to clipboard!', {type: 'success'}),
-      noAudioPlayback: new Message('Audio playback is not supported on your browser.', {type: 'error'})
+      noAudioPlayback: new Message('Audio playback is not supported on your browser.', {type: 'error'}),
+      notAudioFile: new Message('Not an audio file.', {type: 'error'}),
+      audioTooLarge: new Message('Exceeds 3s limit.', {type: 'error'}),
     }
     this.playing = false
     this.recording = false
@@ -60,6 +65,8 @@ class App {
       // this.handleError('noAudioPlayback')
       this.alerts.noAudioPlayback.show()
     }
+
+    this.setDrop()
   }
 
   supportsWebm () {
@@ -240,6 +247,7 @@ class App {
   }
 
   saveButton (button) {
+    console.log('SAVE', button)
     fetch(button.src).then((response) => {
       response
         .arrayBuffer()
@@ -249,6 +257,7 @@ class App {
             name: button.name,
             channel: this.channel
           }
+          console.log('send binary, meta:', meta)
           this.sendBinary(buffer, meta)
         })
     })
@@ -322,6 +331,113 @@ class App {
 
   onKey (code) {
 
+  }
+
+  onDrag (e) {
+    e.preventDefault()
+    e.stopPropagation()
+    if (this.dragging) return
+
+    clearTimeout(this.dragTimeout)
+    this.$drop.show('flex')
+
+    // console.log('DRAG', e)
+    this.dragging = true
+    setTimeout(() => this.dragging = false, 70)
+    return false
+  }
+
+  onDragEnter (e) {
+    e.preventDefault()
+    e.stopPropagation()
+    return false
+  }
+
+  onDragLeave (e) {
+    e.preventDefault()
+    e.stopPropagation()
+
+    // console.log('DRAG LEAVE')
+    clearTimeout(this.dragTimeout)
+    this.dragTimeout = setTimeout(() => this.$drop.hide(), 100)
+    return false
+  }
+
+  onDrop (e) {
+    e.stopPropagation()
+    e.preventDefault()
+    console.log('DROP', e)
+    this.$drop.hide()
+
+    if (e.dataTransfer.items) {
+      const files = Array.from(e.dataTransfer.files)
+
+      if (files.length === 0) {
+        console.log('No files available.')
+        return
+      }
+
+      e.dataTransfer.dropEffect = 'copy'
+      console.log('FILES', files)
+
+      files.map((file) => {
+        console.log('FILE', file)
+        this.addDroppedAudio(file)
+      })
+    }
+    return false
+  }
+
+  addDroppedAudio (file) {
+    console.log('Add dropped audio...', file)
+    // Check if it's audio.
+    if (!file.type.match(/audio/)) {
+      console.error('Not audio.')
+      this.alerts.notAudioFile.show()
+      return
+    }
+
+    // Read audio data.
+    const blob = window.URL.createObjectURL(file)
+    const audio = new Audio()
+    audio.addEventListener('loadedmetadata', (metadata) => {
+      // console.log('METADATA', metadata)
+      console.log('DURATION (seconds)', audio.duration)
+      // window.URL.revokeObjectURL(blob)
+
+      // Time limit.
+      if (audio.duration > this.dropAudioDurationLimit) {
+        console.error(`Audio duration is more than ${this.dropAudioDurationLimit} seconds.`)
+        this.alerts.audioTooLarge.show()
+        return
+      }
+
+      // Add button.
+      const id = (new Date()).getTime()
+      this.addButton(null, {id, name: file.name})
+      this.audioCollection[id].src = blob
+      this.saveButton(this.audioCollection[id])
+    })
+    audio.src = blob
+
+
+    // const reader = new FileReader()
+    // reader.onload = (data) => {
+    //   console.log('FILE READ OK', data)
+    // }
+    // reader.readAsDataURL(file)
+
+    // Check length.
+
+    // Add new button with file data.
+    console.log('Add new button with dropped audio!')
+  }
+
+  setDrop () {
+    document.body.addEventListener('dragenter', e => this.onDragEnter(e), false)
+    document.body.addEventListener('dragover', e => this.onDrag(e), false)
+    document.body.addEventListener('dragleave', e => this.onDragLeave(e), false)
+    document.body.addEventListener('drop', e => this.onDrop(e), false)
   }
 
   getRandomColor () {

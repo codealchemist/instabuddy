@@ -145,7 +145,7 @@ body {
   animation-iteration-count: infinite;
 }
 
-#background {
+.background {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -162,6 +162,7 @@ body {
   color: #111;
   font-size: 12vw;
   text-align: center;
+  cursor: default;
 }
 
 .center {
@@ -187,4 +188,10 @@ body {
 
 .prophet {
   bottom: 0;
+}
+
+#drop {
+  background: rgba(0,0,0,0.9);
+  color: #222;
+  display: none;
 }
