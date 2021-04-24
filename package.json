@@ -11,13 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/codealchemist/instabuddy.git"
   },
-  "keywords": [
-    "instabuddy",
-    "audio",
-    "fun",
-    "button",
-    "generator"
-  ],
+  "keywords": ["instabuddy", "audio", "fun", "button", "generator"],
   "author": "Alberto Miranda",
   "license": "MIT",
   "bugs": {
@@ -25,7 +19,7 @@
   },
   "homepage": "https://github.com/codealchemist/instabuddy#readme",
   "devDependencies": {
-    "parcel": "*",
+    "parcel": "2.0.0-beta.2",
     "standard-focus": "^1.1.2"
   },
   "dependencies": {
