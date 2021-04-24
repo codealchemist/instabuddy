@@ -4,8 +4,6 @@ import El from './el'
 import InstabuddyEvents from './events'
 import '../css/style.css'
 import '../css/animations.css'
-import '../css/prophet.css'
-import '../css/prophet-overrides.css'
 import '../css/button.css'
 import '../css/button-animations.css'
 import '../css/colors.css'
@@ -45,25 +43,26 @@ class App {
         'Audio playback is not supported on your browser. Please, try with latest Chrome or Firefox :)'
     }
     this.alerts = {
-      playbackError: Swal.fire('Error', 'Oops, playback failed.', 'error'),
-      playbackNotFoundError: Swal.fire(
-        'Error',
-        'Audio source not found.',
-        'error'
-      ),
-      playbackErrorRepeated: Swal.fire(
-        'Error',
-        'Playback failed several times. Maybe your browser does not support webm audio.',
-        'error'
-      ),
-      clipboardCopyOk: Swal.fire('Error', 'Copied to clipboard!', 'success'),
-      noAudioPlayback: Swal.fire(
-        'Error',
-        'Audio playback is not supported on your browser.',
-        'error'
-      ),
-      notAudioFile: Swal.fire('Error', 'Not an audio file.', 'error'),
-      audioTooLarge: Swal.fire('Error', 'Exceeds 3s limit.', 'error')
+      playbackError: () =>
+        Swal.fire('Error', 'Oops, playback failed.', 'error'),
+      playbackNotFoundError: () =>
+        Swal.fire('Error', 'Audio source not found.', 'error'),
+      playbackErrorRepeated: () =>
+        Swal.fire(
+          'Error',
+          'Playback failed several times. Maybe your browser does not support webm audio.',
+          'error'
+        ),
+      clipboardCopyOk: () =>
+        Swal.fire('Error', 'Copied to clipboard!', 'success'),
+      noAudioPlayback: () =>
+        Swal.fire(
+          'Error',
+          'Audio playback is not supported on your browser.',
+          'error'
+        ),
+      notAudioFile: () => Swal.fire('Error', 'Not an audio file.', 'error'),
+      audioTooLarge: () => Swal.fire('Error', 'Exceeds 3s limit.', 'error')
     }
     this.playing = false
     this.recording = false
@@ -90,7 +89,7 @@ class App {
     // Check for playback support.
     if (!this.supportsWebm()) {
       // this.handleError('noAudioPlayback')
-      this.alerts.noAudioPlayback.show()
+      this.alerts.noAudioPlayback()
     }
 
     this.setDrop()
@@ -107,7 +106,7 @@ class App {
     // Clipboard supported!
     const clipboard = new Clipboard('i.share')
     clipboard.on('success', e => {
-      this.alerts.clipboardCopyOk.show()
+      this.alerts.clipboardCopyOk()
     })
   }
 
@@ -179,7 +178,8 @@ class App {
 
     let wsProto = 'ws'
     if (location.protocol === 'https:') wsProto = 'wss'
-    const wsUrl = `${wsProto}://${location.host}`
+    // const wsUrl = `${wsProto}://${location.host}`
+    const wsUrl = `wss://instabuddy.herokuapp.com`
     log('WS URL:', wsUrl)
     this.ws = new ReconnectingWebSocket(wsUrl)
     this.ws.binaryType = 'arraybuffer'
@@ -335,7 +335,7 @@ class App {
   }
 
   handlePlaybackError (alerId, $el, timeoutId) {
-    this.alerts[alerId].show()
+    this.alerts[alerId]()
     clearTimeout(timeoutId)
     $el.removeClass('playing')
     this.playing = false
@@ -410,7 +410,7 @@ class App {
   addDroppedAudio (file) {
     // Check if it's audio.
     if (!file.type.match(/audio/)) {
-      this.alerts.notAudioFile.show()
+      this.alerts.notAudioFile()
       return
     }
 
@@ -425,7 +425,7 @@ class App {
         console.error(
           `Audio duration is more than ${this.dropAudioDurationLimit} seconds.`
         )
-        this.alerts.audioTooLarge.show()
+        this.alerts.audioTooLarge()
         return
       }
 

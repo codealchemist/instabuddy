@@ -113,38 +113,6 @@ body {
   border: 1px solid white;
 }
 
-.btn.playing:before {
-  content: '';
-  width: 150px;
-  height: 150px;
-  border: 2px solid white;
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  border: 4px solid white;
-  border-radius: 50%;
-  display: block;
-  animation-duration: 1s;
-  animation-name: ripple1;
-  animation-iteration-count: infinite;
-}
-
-.btn.playing:after {
-  content: '';
-  width: 150px;
-  height: 150px;
-  border: 2px solid white;
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  border: 4px solid white;
-  border-radius: 50%;
-  display: block;
-  animation-duration: 1.5s;
-  animation-name: ripple2;
-  animation-iteration-count: infinite;
-}
-
 .background {
   display: flex;
   align-items: center;
@@ -191,7 +159,7 @@ body {
 }
 
 #drop {
-  background: rgba(0,0,0,0.9);
+  background: rgba(0, 0, 0, 0.9);
   color: #222;
   display: none;
 }
