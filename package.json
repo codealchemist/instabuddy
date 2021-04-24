@@ -42,11 +42,13 @@
     "binaryjs": "^0.2.1",
     "body-parser": "^1.18.2",
     "cloudinary": "^1.9.0",
+    "dotenv": "^8.2.0",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
     "https-enforcer": "^1.0.0",
     "mkdirp": "^0.5.1",
-    "mongojs": "^2.4.1",
+    "mongodb": "^3.6.6",
+    "mongojs": "^3.1.0",
     "ws": "^3.1.0"
   },
   "optionalDependencies": {

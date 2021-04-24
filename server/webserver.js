@@ -121,13 +121,16 @@ function setRoutes (localAudio = false) {
   })
 
   app.use(httpsEnforcer)
-  app.use('/', express.static(staticPath))
   app.set('views', path.resolve(envPath))
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html')
 
   app.use(bodyParser.json()) // support json encoded bodies
   app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
+
+  app.get('/', (req, res) => {
+    res.render('index', {openGraph})
+  })
 
   app.get('/channel/:id', (req, res) => {
     const id = req.params.id
@@ -238,6 +241,8 @@ function setRoutes (localAudio = false) {
       })
     })
   })
+
+  app.use('/', express.static(staticPath))
 
   app.use((req, res) => {
     res.sendStatus(404)

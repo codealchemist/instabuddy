@@ -32,7 +32,7 @@ gulp.task('copy', (cb) => {
       `${paths.js}/prophet.js.map`,
       `${paths.src}/*`,
       `!${paths.src}/*.html`,
-      `${paths.partials}/*`,
+      `${paths.partials}/*`
     ]),
     copy(paths.dist, {prefix: 1}),
     gulp.dest(paths.dist)

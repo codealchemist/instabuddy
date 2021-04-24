@@ -473,4 +473,11 @@ function log () {
   console.log('[ APP ]-->', ...arguments)
 }
 
+// Register service worker.
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('/sw.js')
+    .then(function() { console.log("Service Worker Registered"); });
+}
+
 const app = new App(mode)

@@ -1,6 +1,8 @@
 node_modules
 npm-debug.log
-data
+data/*
 queries
 audio/*
 backup
+.env
+test-connection.js
