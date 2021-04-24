@@ -16,6 +16,7 @@ const pathMap = {
   dev: 'client'
 }
 const envPath = pathMap[env]
+console.log('- envPath', envPath)
 
 // open graph defaults
 const openGraph = {
@@ -42,26 +43,28 @@ function setLocalAudioRoutes () {
   app.use('/audio', express.static(audioPath))
 
   app.post('/binary/:channel/:id/:name', (req, res) => {
-    const {id, name, channel} = req.params
+    const { id, name, channel } = req.params
     console.log(`SAVE BINARY DATA: ${id}:${name} @ ${channel}`)
 
-    const data = {id, name, channel}
+    const data = { id, name, channel }
     storageAdapter.saveBinary(req, audioPath, data) // Save to disk.
   })
 }
 
 function setRemoteAudioRoutes () {
   app.post('/binary/:channel/:id/:name', (req, res) => {
-    const {id, name, channel} = req.params
+    const { id, name, channel } = req.params
     console.log(`SAVE BINARY DATA: ${id}:${name} @ ${channel}`)
 
-    const data = {id, name, channel}
+    const data = { id, name, channel }
     storageAdapter.upload(req, data) // Save on the cloud.
   })
 }
 
 function isPrivateIp (host) {
-  return host.match(/^localhost|(^127\.)|(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])/)
+  return host.match(
+    /^localhost|(^127\.)|(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])/
+  )
 }
 
 function redirectToHeroku (req, res, next) {
@@ -86,34 +89,39 @@ function setRoutes (localAudio = false) {
   app.use(redirectToHeroku)
 
   app.get('/channel/:channel/remote-play/:buttonId', (req, res) => {
-    const {channel, buttonId} = req.params
+    const { channel, buttonId } = req.params
     console.log(`REMOTE-PLAY from CHANNEL '${channel}':`, buttonId)
-    channelModel.getButton({channel, buttonId}, (err, response) => {
+    channelModel.getButton({ channel, buttonId }, (err, response) => {
       if (err) {
-        console.log(`ERROR remote-playing standalone button @${channel}: ${buttonId}`, err)
+        console.log(
+          `ERROR remote-playing standalone button @${channel}: ${buttonId}`,
+          err
+        )
         return
       }
 
       // Empty.
       if (!response.buttons || !response.buttons.length) {
-        console.log(`CAN'T REMOTE PLAY ${buttonId} @${channel}, document not found`)
-        res.render('button-not-found', {channel})
+        console.log(
+          `CAN'T REMOTE PLAY ${buttonId} @${channel}, document not found`
+        )
+        res.render('button-not-found', { channel })
         return
       }
 
       // Got button.
       const button = response.buttons[0]
-      const {id, src} = button
+      const { id, src } = button
 
       // Remote playback using socket.
-      instabuddyConnector.play({channel, id, src})
+      instabuddyConnector.play({ channel, id, src })
 
       res.json(button)
     })
   })
 
   app.get('/channel/:channel/remote-random', (req, res) => {
-    const {channel} = req.params
+    const { channel } = req.params
     console.log(`REMOTE-RANDOM-PLAY from CHANNEL '${channel}'`)
 
     instabuddyConnector.playRandom(channel)
@@ -122,14 +130,14 @@ function setRoutes (localAudio = false) {
 
   app.use(httpsEnforcer)
   app.set('views', path.resolve(envPath))
-  app.engine('html', require('ejs').renderFile);
+  app.engine('html', require('ejs').renderFile)
   app.set('view engine', 'html')
 
   app.use(bodyParser.json()) // support json encoded bodies
   app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
 
   app.get('/', (req, res) => {
-    res.render('index', {openGraph})
+    res.render('index', { openGraph })
   })
 
   app.get('/channel/:id', (req, res) => {
@@ -138,9 +146,9 @@ function setRoutes (localAudio = false) {
 
     const channelOpenGraph = Object.assign({}, openGraph, {
       title: `InstaBuddy @${id}`,
-      url: `${openGraph.url}/channel/${id}`,
+      url: `${openGraph.url}/channel/${id}`
     })
-    res.render('index', {openGraph: channelOpenGraph})
+    res.render('index', { openGraph: channelOpenGraph })
   })
 
   app.get('/channel/:id/reset', (req, res) => {
@@ -153,18 +161,21 @@ function setRoutes (localAudio = false) {
   })
 
   app.get('/channel/:channel/play/:buttonId', (req, res) => {
-    const {channel, buttonId} = req.params
+    const { channel, buttonId } = req.params
     console.log(`PLAY from CHANNEL '${channel}':`, buttonId)
-    channelModel.getButton({channel, buttonId}, (err, response) => {
+    channelModel.getButton({ channel, buttonId }, (err, response) => {
       if (err) {
-        console.log(`ERROR playing standalone button @${channel}: ${buttonId}`, err)
+        console.log(
+          `ERROR playing standalone button @${channel}: ${buttonId}`,
+          err
+        )
         return
       }
 
       // Empty.
       if (!response.buttons || !response.buttons.length) {
         console.log(`CAN'T PLAY ${buttonId} @${channel}, document not found`)
-        res.render('button-not-found', {channel})
+        res.render('button-not-found', { channel })
         return
       }
 
@@ -176,7 +187,7 @@ function setRoutes (localAudio = false) {
         title: button.name,
         description: `InstaBuddy @${channel}`
       })
-      res.render('button', {channel, button, openGraph: buttonOpenGraph})
+      res.render('button', { channel, button, openGraph: buttonOpenGraph })
     })
   })
 
@@ -188,26 +199,29 @@ function setRoutes (localAudio = false) {
 
       const channelOpenGraph = Object.assign({}, openGraph, {
         title: `InstaBuddy @${id}`,
-        url: `${openGraph.url}/channel/${id}`,
+        url: `${openGraph.url}/channel/${id}`
       })
-      res.render('index', {openGraph: channelOpenGraph})
+      res.render('index', { openGraph: channelOpenGraph })
       return
     })
   })
 
   app.post('/slack', (req, res) => {
     console.log('SLACK:', req.body)
-    const {text, user_name} = req.body
+    const { text, user_name } = req.body
     const [channel, buttonName] = text.split('/')
 
-    channelModel.getButtonByName({channel, buttonName}, (err, response) => {
+    channelModel.getButtonByName({ channel, buttonName }, (err, response) => {
       if (err) {
-        console.log(`ERROR playing standalone button @${channel}: ${buttonId}`, err)
+        console.log(
+          `ERROR playing standalone button @${channel}: ${buttonId}`,
+          err
+        )
         res.json({
-          "text": `Oops, I found an error with '${channel}/${buttonName}', sorry!`,
-          "attachments": [
+          text: `Oops, I found an error with '${channel}/${buttonName}', sorry!`,
+          attachments: [
             {
-              "text": err.message || err
+              text: err.message || err
             }
           ]
         })
@@ -218,7 +232,7 @@ function setRoutes (localAudio = false) {
       if (!response.buttons || !response.buttons.length) {
         console.log(`CAN'T PLAY ${buttonId} @${channel}, document not found`)
         res.json({
-          "text": `Oops, I didn't find '${channel}/${buttonName}', sorry!`
+          text: `Oops, I didn't find '${channel}/${buttonName}', sorry!`
         })
         return
       }
@@ -229,13 +243,13 @@ function setRoutes (localAudio = false) {
       const buttonUrl = `${openGraph.url}/channel/${channel}/play/${buttonId}`
 
       res.json({
-        "response_type": "in_channel",
+        response_type: 'in_channel',
         title: `InstaBuddy @${channel}/${buttonName}`,
-        "text": `<${buttonUrl}>`,
-        "unfurl_links": true,
-        "attachments": [
+        text: `<${buttonUrl}>`,
+        unfurl_links: true,
+        attachments: [
           {
-            "text": `@${user_name} says '${buttonName}'`
+            text: `@${user_name} says '${buttonName}'`
           }
         ]
       })

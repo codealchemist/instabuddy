@@ -68,12 +68,13 @@ class App {
     this.playing = false
     this.recording = false
     this.connected = false
-    this.mode = mode
+    this.mode = window.mode
 
     this.init()
   }
 
   init () {
+    log('INIT')
     if (this.mode === 'normal') {
       this.initRecording()
       this.initClipboard()
@@ -81,6 +82,7 @@ class App {
 
     // Connect to socket server, set event handlers and get current channel.
     this.connect(() => {
+      log('init/connect')
       this.events = new InstabuddyEvents(this)
       if (this.mode !== 'standalone') this.getChannel()
     })
@@ -168,6 +170,7 @@ class App {
   }
 
   connect (callback) {
+    log('connect')
     // Check for websockets support.
     if (!'WebSocket' in window) {
       alert(this.messages.noWebSocketSupport)
@@ -176,7 +179,9 @@ class App {
 
     let wsProto = 'ws'
     if (location.protocol === 'https:') wsProto = 'wss'
-    this.ws = new ReconnectingWebSocket(`${wsProto}://${location.host}`)
+    const wsUrl = `${wsProto}://${location.host}`
+    log('WS URL:', wsUrl)
+    this.ws = new ReconnectingWebSocket(wsUrl)
     this.ws.binaryType = 'arraybuffer'
 
     this.ws.onopen = () => {
@@ -507,5 +512,5 @@ function log () {
 //   })
 // }
 
-const app = new App(mode)
+window.app = new App(mode)
 export default app
