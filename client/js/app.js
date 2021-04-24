@@ -1,4 +1,5 @@
-import Message from 'prophetjs/build/js/prophet.js'
+import Swal from 'sweetalert2'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 import El from './el'
 import InstabuddyEvents from './events'
 import '../css/style.css'
@@ -44,23 +45,25 @@ class App {
         'Audio playback is not supported on your browser. Please, try with latest Chrome or Firefox :)'
     }
     this.alerts = {
-      playbackError: new Message('Oops, playback failed.', { type: 'error' }),
-      playbackNotFoundError: new Message('Error: Audio source not found.', {
-        type: 'error'
-      }),
-      playbackErrorRepeated: new Message(
-        `
-        Playback failed several times. Maybe your browser does not support webm audio.
-      `,
-        { type: 'error' }
+      playbackError: Swal.fire('Error', 'Oops, playback failed.', 'error'),
+      playbackNotFoundError: Swal.fire(
+        'Error',
+        'Audio source not found.',
+        'error'
       ),
-      clipboardCopyOk: new Message('Copied to clipboard!', { type: 'success' }),
-      noAudioPlayback: new Message(
+      playbackErrorRepeated: Swal.fire(
+        'Error',
+        'Playback failed several times. Maybe your browser does not support webm audio.',
+        'error'
+      ),
+      clipboardCopyOk: Swal.fire('Error', 'Copied to clipboard!', 'success'),
+      noAudioPlayback: Swal.fire(
+        'Error',
         'Audio playback is not supported on your browser.',
-        { type: 'error' }
+        'error'
       ),
-      notAudioFile: new Message('Not an audio file.', { type: 'error' }),
-      audioTooLarge: new Message('Exceeds 3s limit.', { type: 'error' })
+      notAudioFile: Swal.fire('Error', 'Not an audio file.', 'error'),
+      audioTooLarge: Swal.fire('Error', 'Exceeds 3s limit.', 'error')
     }
     this.playing = false
     this.recording = false

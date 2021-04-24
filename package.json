@@ -39,8 +39,8 @@
     "mkdirp": "^0.5.1",
     "mongodb": "^3.6.6",
     "mongojs": "^3.1.0",
-    "prophetjs": "^1.0.0",
     "reconnecting-websocket": "^4.4.0",
+    "sweetalert2": "^10.16.6",
     "ws": "^3.1.0"
   },
   "optionalDependencies": {
