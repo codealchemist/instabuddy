@@ -1,3 +1,14 @@
+import Message from 'prophetjs/build/js/prophet.js'
+import El from './el'
+import InstabuddyEvents from './events'
+import '../css/style.css'
+import '../css/animations.css'
+import '../css/prophet.css'
+import '../css/prophet-overrides.css'
+import '../css/button.css'
+import '../css/button-animations.css'
+import '../css/colors.css'
+
 class App {
   constructor (mode) {
     this.$buttons = new El('#buttons')
@@ -25,20 +36,31 @@ class App {
     this.downloadLink = document.querySelector('#download')
     this.messages = {
       noAudioRecording: 'Your browser does not support audio recording, sorry.',
-      noWebSocketSupport: 'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)',
-      notSupported: 'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)',
-      noAudioPlayback: 'Audio playback is not supported on your browser. Please, try with latest Chrome or Firefox :)'
+      noWebSocketSupport:
+        'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)',
+      notSupported:
+        'InstaBuddy is not fully supported on your browser. Please, try with latest Chrome or Firefox :)',
+      noAudioPlayback:
+        'Audio playback is not supported on your browser. Please, try with latest Chrome or Firefox :)'
     }
     this.alerts = {
-      playbackError: new Message('Oops, playback failed.', {type: 'error'}),
-      playbackNotFoundError: new Message('Error: Audio source not found.', {type: 'error'}),
-      playbackErrorRepeated: new Message(`
+      playbackError: new Message('Oops, playback failed.', { type: 'error' }),
+      playbackNotFoundError: new Message('Error: Audio source not found.', {
+        type: 'error'
+      }),
+      playbackErrorRepeated: new Message(
+        `
         Playback failed several times. Maybe your browser does not support webm audio.
-      `, {type: 'error'}),
-      clipboardCopyOk: new Message('Copied to clipboard!', {type: 'success'}),
-      noAudioPlayback: new Message('Audio playback is not supported on your browser.', {type: 'error'}),
-      notAudioFile: new Message('Not an audio file.', {type: 'error'}),
-      audioTooLarge: new Message('Exceeds 3s limit.', {type: 'error'}),
+      `,
+        { type: 'error' }
+      ),
+      clipboardCopyOk: new Message('Copied to clipboard!', { type: 'success' }),
+      noAudioPlayback: new Message(
+        'Audio playback is not supported on your browser.',
+        { type: 'error' }
+      ),
+      notAudioFile: new Message('Not an audio file.', { type: 'error' }),
+      audioTooLarge: new Message('Exceeds 3s limit.', { type: 'error' })
     }
     this.playing = false
     this.recording = false
@@ -73,20 +95,21 @@ class App {
     return !!this.$audio.canPlayType('audio/webm')
   }
 
-  initClipboard() {
+  initClipboard () {
     // No clipboard support.
     if (!Clipboard.isSupported()) return
 
     // Clipboard supported!
     const clipboard = new Clipboard('i.share')
-    clipboard.on('success', (e) => {
+    clipboard.on('success', e => {
       this.alerts.clipboardCopyOk.show()
     })
   }
 
   initRecording () {
     try {
-      navigator.mediaDevices.getUserMedia({audio:true})
+      navigator.mediaDevices
+        .getUserMedia({ audio: true })
         .then(stream => {
           try {
             this.recorder = new MediaRecorder(stream)
@@ -138,14 +161,12 @@ class App {
   }
 
   showError (message) {
-    this.$error
-      .html(message)
-      .show()
+    this.$error.html(message).show()
   }
 
   connect (callback) {
     // Check for websockets support.
-    if (! 'WebSocket' in window) {
+    if (!'WebSocket' in window) {
       alert(this.messages.noWebSocketSupport)
       return
     }
@@ -166,13 +187,14 @@ class App {
       if (typeof callback === 'function') callback()
     }
 
-    this.ws.onmessage = (event) => {
-      const {type, data, error} = JSON.parse(event.data)
+    this.ws.onmessage = event => {
+      const { type, data, error } = JSON.parse(event.data)
       log(`Got message '${type}'`, data, error)
-      if (typeof this.events[type] === 'function') this.events[type]({type, data, error})
+      if (typeof this.events[type] === 'function')
+        this.events[type]({ type, data, error })
     }
 
-    this.ws.onerror = (event) => {
+    this.ws.onerror = event => {
       log('ERROR:', event)
     }
   }
@@ -184,7 +206,7 @@ class App {
 
   getChannel () {
     log('Get channel...')
-    this.send({type: 'getChannel', 'name': this.channel})
+    this.send({ type: 'getChannel', name: this.channel })
   }
 
   onButtonClick (event) {
@@ -222,10 +244,10 @@ class App {
     this.recorder.start()
     this.recorder.ondataavailable = e => {
       audioChunks.push(e.data)
-      if (this.recorder.state !== "inactive") return
+      if (this.recorder.state !== 'inactive') return
 
       // Recording stopped.
-      const blob = new Blob(audioChunks, {type: 'audio/webm'})
+      const blob = new Blob(audioChunks, { type: 'audio/webm' })
       this.audioCollection[id].src = URL.createObjectURL(blob)
       this.saveButton(this.audioCollection[id])
     }
@@ -239,25 +261,23 @@ class App {
     }, this.recordingTime)
   }
 
-  sendBinary (buffer, {id, name, channel}) {
-    const xhr = new XMLHttpRequest
+  sendBinary (buffer, { id, name, channel }) {
+    const xhr = new XMLHttpRequest()
     const url = `/binary/${channel}/${id}/${name}`
     xhr.open('POST', url, true)
     xhr.send(buffer)
   }
 
   saveButton (button) {
-    fetch(button.src).then((response) => {
-      response
-        .arrayBuffer()
-        .then((buffer) => {
-          const meta = {
-            id: button.id,
-            name: button.name,
-            channel: this.channel
-          }
-          this.sendBinary(buffer, meta)
-        })
+    fetch(button.src).then(response => {
+      response.arrayBuffer().then(buffer => {
+        const meta = {
+          id: button.id,
+          name: button.name,
+          channel: this.channel
+        }
+        this.sendBinary(buffer, meta)
+      })
     })
   }
 
@@ -290,7 +310,10 @@ class App {
           // Safari throws this error but plays OK.
           if (e.message === 'The operation is not supported.') return
 
-          if (e.message === 'Failed to load because no supported source was found.') {
+          if (
+            e.message ===
+            'Failed to load because no supported source was found.'
+          ) {
             this.handlePlaybackError('playbackNotFoundError', $el, timeoutId)
             return
           }
@@ -322,13 +345,12 @@ class App {
     event.preventDefault()
 
     this.downloadLink.href = this.audioCollection[id].src
-    this.downloadLink.download = this.audioCollection[id].name.replace(' ', '-') + '.webm'
+    this.downloadLink.download =
+      this.audioCollection[id].name.replace(' ', '-') + '.webm'
     this.downloadLink.click()
   }
 
-  onKey (code) {
-
-  }
+  onKey (code) {}
 
   onDrag (e) {
     e.preventDefault()
@@ -339,7 +361,7 @@ class App {
     this.$drop.show('flex')
 
     this.dragging = true
-    setTimeout(() => this.dragging = false, 70)
+    setTimeout(() => (this.dragging = false), 70)
     return false
   }
 
@@ -387,19 +409,21 @@ class App {
     // Read audio data.
     const blob = window.URL.createObjectURL(file)
     const audio = new Audio()
-    audio.addEventListener('loadedmetadata', (metadata) => {
+    audio.addEventListener('loadedmetadata', metadata => {
       // window.URL.revokeObjectURL(blob)
 
       // Time limit.
       if (audio.duration > this.dropAudioDurationLimit) {
-        console.error(`Audio duration is more than ${this.dropAudioDurationLimit} seconds.`)
+        console.error(
+          `Audio duration is more than ${this.dropAudioDurationLimit} seconds.`
+        )
         this.alerts.audioTooLarge.show()
         return
       }
 
       // Add button.
-      const id = (new Date()).getTime()
-      this.addButton(null, {id, name: file.name})
+      const id = new Date().getTime()
+      this.addButton(null, { id, name: file.name })
       this.audioCollection[id].src = blob
       this.saveButton(this.audioCollection[id])
     })
@@ -425,17 +449,17 @@ class App {
     const $button = new El(`#btn-${id}`)
     $button.remove()
 
-    this.send({type: 'removeButton', channel: this.channel, id})
+    this.send({ type: 'removeButton', channel: this.channel, id })
   }
 
   addButton (event, button = {}) {
-    let {id, name} = button
+    let { id, name } = button
     if (event) event.stopPropagation()
     name = name || prompt('Button name?')
     if (!name || !name.trim()) return
 
-    const empty = id? '' : ' empty'
-    id = id || (new Date()).getTime()
+    const empty = id ? '' : ' empty'
+    id = id || new Date().getTime()
     const elId = `btn-${id}`
     const color = this.getRandomColor()
     this.$buttons.prependHtml(`
@@ -452,7 +476,7 @@ class App {
       </div>
     `)
 
-    this.addAudio(id, {id, name, color})
+    this.addAudio(id, { id, name, color })
 
     return id
   }
@@ -464,7 +488,7 @@ class App {
     const buttonUrl = `${this.url}/play/${id}`
   }
 
-  addAudio(id, button) {
+  addAudio (id, button) {
     this.audioCollection[id] = button
   }
 }
@@ -474,10 +498,11 @@ function log () {
 }
 
 // Register service worker.
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker
-    .register('/sw.js')
-    .then(function() { console.log("Service Worker Registered"); });
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('../sw.js').then(function () {
+    console.log('Service Worker Registered')
+  })
 }
 
 const app = new App(mode)
+export default app

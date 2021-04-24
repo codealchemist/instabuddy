@@ -2,10 +2,10 @@
   "name": "instabuddy",
   "version": "1.10.0",
   "description": "Instant button generator.",
-  "main": "server/index.js",
   "scripts": {
     "test": "standard-focus",
-    "start": "node server"
+    "start": "node server",
+    "build": "clear; parcel build client/index.html"
   },
   "repository": {
     "type": "git",
@@ -25,17 +25,7 @@
   },
   "homepage": "https://github.com/codealchemist/instabuddy#readme",
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "del": "^3.0.0",
-    "gulp-babel": "^7.0.0",
-    "gulp-clean-css": "^3.8.0",
-    "gulp-copy": "^1.0.1",
-    "gulp-if": "^2.0.2",
-    "gulp-sequence": "^0.4.6",
-    "gulp-uglify": "^3.0.0",
-    "gulp-useref": "^3.1.2",
-    "pump": "^1.0.2",
+    "parcel": "*",
     "standard-focus": "^1.1.2"
   },
   "dependencies": {
@@ -49,6 +39,8 @@
     "mkdirp": "^0.5.1",
     "mongodb": "^3.6.6",
     "mongojs": "^3.1.0",
+    "prophetjs": "^1.0.0",
+    "reconnecting-websocket": "^4.4.0",
     "ws": "^3.1.0"
   },
   "optionalDependencies": {

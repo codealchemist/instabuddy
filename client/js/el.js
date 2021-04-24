@@ -1,4 +1,4 @@
-class El {
+export default class El {
   constructor (element) {
     if (typeof element === 'string') {
       element = document.querySelector(element)
@@ -63,7 +63,7 @@ class El {
     return this
   }
 
-  setRandomBackground ({path = '', range = [0, 5], length = 3, ext = 'jpg'}) {
+  setRandomBackground ({ path = '', range = [0, 5], length = 3, ext = 'jpg' }) {
     const [min, max] = range
     const num = Math.round(Math.random() * (max - min) + min)
     const name = ('0'.repeat(length) + num).substr(-length)
@@ -81,7 +81,7 @@ class El {
   }
 
   html (value) {
-    if (value === undefined) return this.$el.innerHTML;
+    if (value === undefined) return this.$el.innerHTML
 
     this.$el.innerHTML = value
     return this
@@ -110,7 +110,7 @@ class El {
 
   isVisible () {
     if (this.$el.style.display === '') return true
-    return (this.$el.style.display.match(/(block|inline|inline-block)/))
+    return this.$el.style.display.match(/(block|inline|inline-block)/)
   }
 
   toggle () {
@@ -124,22 +124,22 @@ class El {
   }
 
   caretEnd () {
-    this.$el.focus();
+    this.$el.focus()
     if (
-      typeof window.getSelection != "undefined" &&
-      typeof document.createRange != "undefined"
+      typeof window.getSelection != 'undefined' &&
+      typeof document.createRange != 'undefined'
     ) {
-        var range = document.createRange();
-        range.selectNodeContents(this.$el);
-        range.collapse(false);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-    } else if (typeof document.body.createTextRange != "undefined") {
-        var textRange = document.body.createTextRange();
-        textRange.moveToElementText(this.$el);
-        textRange.collapse(false);
-        textRange.select();
+      var range = document.createRange()
+      range.selectNodeContents(this.$el)
+      range.collapse(false)
+      var sel = window.getSelection()
+      sel.removeAllRanges()
+      sel.addRange(range)
+    } else if (typeof document.body.createTextRange != 'undefined') {
+      var textRange = document.body.createTextRange()
+      textRange.moveToElementText(this.$el)
+      textRange.collapse(false)
+      textRange.select()
     }
 
     return this
@@ -160,7 +160,7 @@ class El {
     return this
   }
 
-  static injectStyles (styles){
+  static injectStyles (styles) {
     const style = document.createElement('style')
     style.type = 'text/css'
     style.innerHTML = styles

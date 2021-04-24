@@ -1,9 +1,9 @@
-class InstabuddyEvents {
+export default class InstabuddyEvents {
   constructor (app) {
     this.app = app
   }
 
-  channel ({type, data, error}) {
+  channel ({ type, data, error }) {
     this.log('channel:', data)
     if (error) throw new Error(error)
 
@@ -13,14 +13,14 @@ class InstabuddyEvents {
     }
 
     // Add buttons.
-    data.buttons.map((button) => {
+    data.buttons.map(button => {
       console.log('button:', button)
       const id = this.app.addButton(null, button)
       this.app.addAudio(id, button)
     })
   }
 
-  buttonSaved ({type, data, error}) {
+  buttonSaved ({ type, data, error }) {
     if (error) {
       this.log('ERROR SAVING BUTTON', error)
       return
@@ -33,8 +33,8 @@ class InstabuddyEvents {
     console.log('[ EVENTS ]-->', ...arguments)
   }
 
-  play ({type, data, error}) {
-    const {channel, id, src} = data
+  play ({ type, data, error }) {
+    const { channel, id, src } = data
     this.log(`BROADCAST PLAY @${channel}:`, src)
 
     // TODO: Filter channels on the backend.
