@@ -5,7 +5,6 @@ import InstabuddyEvents from './events'
 import '../css/style.css'
 import '../css/animations.css'
 import '../css/button.css'
-import '../css/button-animations.css'
 import '../css/colors.css'
 
 class App {

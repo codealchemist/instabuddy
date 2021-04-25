@@ -455,7 +455,6 @@ var _eventsDefault = _parcelHelpers.interopDefault(_events);
 require('../css/style.css');
 require('../css/animations.css');
 require('../css/button.css');
-require('../css/button-animations.css');
 require('../css/colors.css');
 class App {
   constructor(mode) {
@@ -878,7 +877,7 @@ function log() {
 window.app = new App(mode);
 exports.default = app;
 
-},{"sweetalert2":"65nX0","reconnecting-websocket":"6tJWj","./el":"3Y1ws","./events":"49gRO","../css/style.css":"4YWIn","../css/animations.css":"4ij1f","../css/button.css":"6XyAJ","../css/button-animations.css":"4jlfH","../css/colors.css":"6Z0nh","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"65nX0":[function(require,module,exports) {
+},{"sweetalert2":"65nX0","reconnecting-websocket":"6tJWj","./el":"3Y1ws","./events":"49gRO","../css/style.css":"4YWIn","../css/animations.css":"4ij1f","../css/button.css":"6XyAJ","../css/colors.css":"6Z0nh","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"65nX0":[function(require,module,exports) {
 var define;
 /*!
 * sweetalert2 v10.16.6
@@ -4782,6 +4781,6 @@ class InstabuddyEvents {
 }
 exports.default = InstabuddyEvents;
 
-},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"4YWIn":[function() {},{}],"4ij1f":[function() {},{}],"6XyAJ":[function() {},{}],"4jlfH":[function() {},{}],"6Z0nh":[function() {},{}]},["4dmWh","47Twn"], "47Twn", "parcelRequire3f38")
+},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"4YWIn":[function() {},{}],"4ij1f":[function() {},{}],"6XyAJ":[function() {},{}],"6Z0nh":[function() {},{}]},["4dmWh","47Twn"], "47Twn", "parcelRequire3f38")
 
 //# sourceMappingURL=index.b5532d4d.js.map
