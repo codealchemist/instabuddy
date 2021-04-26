@@ -53,7 +53,7 @@ class App {
           'error'
         ),
       clipboardCopyOk: () =>
-        Swal.fire('Error', 'Copied to clipboard!', 'success'),
+        Swal.fire('Done', 'Copied to clipboard!', 'success'),
       noAudioPlayback: () =>
         Swal.fire(
           'Error',

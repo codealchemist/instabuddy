@@ -483,7 +483,7 @@ class App {
       playbackError: () => _sweetalertDefault.default.fire('Error', 'Oops, playback failed.', 'error'),
       playbackNotFoundError: () => _sweetalertDefault.default.fire('Error', 'Audio source not found.', 'error'),
       playbackErrorRepeated: () => _sweetalertDefault.default.fire('Error', 'Playback failed several times. Maybe your browser does not support webm audio.', 'error'),
-      clipboardCopyOk: () => _sweetalertDefault.default.fire('Error', 'Copied to clipboard!', 'success'),
+      clipboardCopyOk: () => _sweetalertDefault.default.fire('Done', 'Copied to clipboard!', 'success'),
       noAudioPlayback: () => _sweetalertDefault.default.fire('Error', 'Audio playback is not supported on your browser.', 'error'),
       notAudioFile: () => _sweetalertDefault.default.fire('Error', 'Not an audio file.', 'error'),
       audioTooLarge: () => _sweetalertDefault.default.fire('Error', 'Exceeds 3s limit.', 'error')
