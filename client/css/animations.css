@@ -2,27 +2,27 @@
   0% {
     width: 12vw;
     height: 12vw;
-    border-width: 5px;
-    top: -5px;
-    left: -5px;
+    border-width: 0.5vw;
+    top: -0.4vw;
+    left: -0.4vw;
     opacity: 1;
   }
 
   50% {
     width: 14vw;
     height: 14vw;
-    border-width: 10px;
-    top: -20px;
-    left: -20px;
+    border-width: 0.7vw;
+    top: -1.7vw;
+    left: -1.7vw;
     opacity: 0;
   }
 
   100% {
     width: 12vw;
     height: 12vw;
-    border-width: 2px;
-    top: -2px;
-    left: -2px;
+    border-width: 0.1vw;
+    top: -0.2vw;
+    left: -0.2vw;
     opacity: 1;
   }
 }
@@ -31,27 +31,27 @@
   0% {
     width: 12vw;
     height: 12vw;
-    border-width: 5px;
-    top: -5px;
-    left: -5px;
+    border-width: 0.5vw;
+    top: -0.4vw;
+    left: -0.4vw;
     opacity: 1;
   }
 
   50% {
     width: 14vw;
     height: 14vw;
-    border-width: 15px;
-    top: -24px;
-    left: -24px;
+    border-width: 1vw;
+    top: -2vw;
+    left: -2vw;
     opacity: 0;
   }
 
   100% {
     width: 12vw;
     height: 12vw;
-    border-width: 5px;
-    top: -5px;
-    left: -5px;
+    border-width: 0.1vw;
+    top: -0.1vw;
+    left: -0.1vw;
     opacity: 1;
   }
 }

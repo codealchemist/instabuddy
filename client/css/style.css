@@ -21,54 +21,15 @@ body {
   margin: 0 3px;
 }
 
-.button-actions {
-  display: none;
-  position: absolute;
-  background: #eee;
-  width: 90px;
-  height: 30px;
-  padding-top: 12px;
-  border-radius: 20px;
-  bottom: -10px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  border: 1px solid white;
-  font-size: 10px;
-  text-align: center;
-  line-height: 21px;
-}
-
 .ellipsis {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.btn {
-  margin: 5px;
-  position: relative;
-  background: #eee;
-  color: black;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 1s;
-}
-
 .btn.btn-big {
   width: 40vw;
   height: 40vw;
-}
-
-.btn:hover {
-  border: 1px solid white;
-}
-
-.btn:hover .button-actions {
-  display: block;
 }
 
 .btn p {

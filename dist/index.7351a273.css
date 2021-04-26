@@ -21,54 +21,15 @@ body {
   margin: 0 3px;
 }
 
-.button-actions {
-  display: none;
-  position: absolute;
-  background: #eee;
-  width: 90px;
-  height: 30px;
-  padding-top: 12px;
-  border-radius: 20px;
-  bottom: -10px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  border: 1px solid white;
-  font-size: 10px;
-  text-align: center;
-  line-height: 21px;
-}
-
 .ellipsis {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.btn {
-  margin: 5px;
-  position: relative;
-  background: #eee;
-  color: black;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 1s;
-}
-
 .btn.btn-big {
   width: 40vw;
   height: 40vw;
-}
-
-.btn:hover {
-  border: 1px solid white;
-}
-
-.btn:hover .button-actions {
-  display: block;
 }
 
 .btn p {
@@ -168,27 +129,27 @@ body {
   0% {
     width: 12vw;
     height: 12vw;
-    border-width: 5px;
-    top: -5px;
-    left: -5px;
+    border-width: 0.5vw;
+    top: -0.4vw;
+    left: -0.4vw;
     opacity: 1;
   }
 
   50% {
     width: 14vw;
     height: 14vw;
-    border-width: 10px;
-    top: -20px;
-    left: -20px;
+    border-width: 0.7vw;
+    top: -1.7vw;
+    left: -1.7vw;
     opacity: 0;
   }
 
   100% {
     width: 12vw;
     height: 12vw;
-    border-width: 2px;
-    top: -2px;
-    left: -2px;
+    border-width: 0.1vw;
+    top: -0.2vw;
+    left: -0.2vw;
     opacity: 1;
   }
 }
@@ -197,27 +158,27 @@ body {
   0% {
     width: 12vw;
     height: 12vw;
-    border-width: 5px;
-    top: -5px;
-    left: -5px;
+    border-width: 0.5vw;
+    top: -0.4vw;
+    left: -0.4vw;
     opacity: 1;
   }
 
   50% {
     width: 14vw;
     height: 14vw;
-    border-width: 15px;
-    top: -24px;
-    left: -24px;
+    border-width: 1vw;
+    top: -2vw;
+    left: -2vw;
     opacity: 0;
   }
 
   100% {
     width: 12vw;
     height: 12vw;
-    border-width: 5px;
-    top: -5px;
-    left: -5px;
+    border-width: 0.1vw;
+    top: -0.1vw;
+    left: -0.1vw;
     opacity: 1;
   }
 }
@@ -237,21 +198,17 @@ body {
 
 .button-actions {
   display: none;
-  position: absolute;
   background: #eee;
-  width: 10vw;
-  height: 3vw;
-  padding-top: 10px;
   border-radius: 20px;
-  bottom: -10px;
-  left: 0;
-  right: 0;
-  margin: auto;
   border: 1px solid white;
-  font-size: 10px;
   text-align: center;
-  line-height: 21px;
   z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1vw;
+  bottom: -2px;
+  position: absolute;
 }
 
 .ellipsis {
@@ -271,6 +228,9 @@ body {
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 1s;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
 .btn.playing:before {
@@ -310,14 +270,18 @@ body {
   background: rgba(0, 0, 0, 0.25);
 }
 
+.btn .button-actions {
+  display: none;
+}
+
+.btn:hover .button-actions {
+  display: flex;
+}
+
 .btn:hover p {
   border: 1px solid white;
   color: #eee;
   border: 0;
-}
-
-.btn:hover .button-actions {
-  display: block;
 }
 
 .btn p {
