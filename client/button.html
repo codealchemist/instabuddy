@@ -14,15 +14,6 @@
     <!-- Open Graph. -->
     <% include partials/open-graph-headers.html %>
 
-    <!-- Styles. -->
-    <!-- build:css /button.min.css -->
-    <link rel="stylesheet" href="/css/prophet.css">
-    <link rel="stylesheet" href="/css/prophet-overrides.css">
-    <link rel="stylesheet" href="/css/button-animations.css" />
-    <link rel="stylesheet" href="/css/button.css" />
-    <link rel="stylesheet" href="/css/colors.css" />
-    <!-- endbuild -->
-
     <!-- Global Site Tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-83250562-8"></script>
     <script>
@@ -64,14 +55,8 @@
     <a id="download"></a>
     <ul class="prophet"></ul>
 
-    <script>const mode = 'standalone'</script>
-    <script src="/js/reconnecting-websocket.min.js"></script>
-    <!-- build:js /app.min.js -->
-    <script src="/js/prophet.js"></script>
-    <script src="/js/el.js"></script>
-    <script src="/js/events.js"></script>
-    <script src="/js/app.js"></script>
-    <!-- endbuild -->
+    <script>window.mode = 'standalone'</script>
+    <script src="js/app.js"></script>
 
     <script>
       const button = {

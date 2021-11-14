@@ -5,7 +5,7 @@
   "scripts": {
     "test": "standard-focus",
     "start": "clear; node server",
-    "build": "clear; parcel build client/index.html",
+    "build": "clear; parcel build client/*.html",
     "dev": "parcel client/index.html"
   },
   "repository": {
