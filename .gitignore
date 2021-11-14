@@ -6,3 +6,4 @@ audio/*
 backup
 .env
 test-connection.js
+.parcel-cache

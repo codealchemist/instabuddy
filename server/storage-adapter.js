@@ -16,7 +16,7 @@ function upload (req, data) {
 }
 
 function bufferify (req, callback) {
-  let buffer = new Buffer('')
+  let buffer = new Buffer.from('')
   req.on('data', function(chunk) {
     buffer = Buffer.concat([buffer, chunk])
   })
@@ -37,7 +37,7 @@ function saveBinary (req, audioPath, data) {
     }
 
     const fileWriter = fs.createWriteStream(file)
-    let buffer = new Buffer('')
+    let buffer = new Buffer.from('')
     req.on('data', function(chunk) {
       buffer = Buffer.concat([buffer, chunk])
     })
