@@ -1,3 +1,5 @@
+import El from './el'
+
 export default class InstabuddyEvents {
   constructor (app) {
     this.app = app
