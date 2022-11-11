@@ -48,6 +48,7 @@ function setLocalAudioRoutes () {
 
     const data = { id, name, channel }
     storageAdapter.saveBinary(req, audioPath, data) // Save to disk.
+    res.json({ ok: true })
   })
 }
 
@@ -58,6 +59,7 @@ function setRemoteAudioRoutes () {
 
     const data = { id, name, channel }
     storageAdapter.upload(req, data) // Save on the cloud.
+    res.json({ ok: true })
   })
 }
 
