@@ -6,13 +6,20 @@
     "test": "standard-focus",
     "start": "clear; node server",
     "build": "clear; parcel build client/*.html",
-    "dev": "parcel client/index.html"
+    "client": "parcel client/index.html",
+    "dev": "clear; npm run build; nodemon --delay 2 --watch client --watch server server"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/codealchemist/instabuddy.git"
   },
-  "keywords": ["instabuddy", "audio", "fun", "button", "generator"],
+  "keywords": [
+    "instabuddy",
+    "audio",
+    "fun",
+    "button",
+    "generator"
+  ],
   "author": "Alberto Miranda",
   "license": "MIT",
   "bugs": {
@@ -20,6 +27,7 @@
   },
   "homepage": "https://github.com/codealchemist/instabuddy#readme",
   "devDependencies": {
+    "nodemon": "^2.0.20",
     "parcel": "2.0.0-beta.2",
     "standard-focus": "^1.1.2"
   },

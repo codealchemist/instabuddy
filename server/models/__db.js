@@ -7,6 +7,11 @@ const connectionsMap = {
 }
 const env = process.env.ENV || 'dev'
 const connectionString = connectionsMap[env]
+console.log(`
+  ENV: ${env}
+  Connection string (without login):
+  · ${connectionString.replace(/^.*@/, '')}
+`)
 const db = mongojs(connectionString)
 
 module.exports = db

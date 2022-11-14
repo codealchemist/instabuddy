@@ -1,5 +1,9 @@
 const db = require('./__db')
 
+function log () {
+  console.log('[ Channel ]', ...arguments)
+}
+
 class Channel {
   constructor () {
     this.collection = db.collection('channels')
@@ -14,12 +18,14 @@ class Channel {
   }
 
   save (channel) {
+    log(`Save: ${channel}`)
     if (!channel) return
     this.collection.save(channel, callback)
   }
 
   create (name, callback) {
     name = name.trim()
+    log(`Create: ${name}`)
     if (!name) return
     this.collection.save({
       name,
@@ -30,6 +36,7 @@ class Channel {
   }
 
   reset (channel, callback) {
+    log(`Reset: ${channel}`)
     if (!channel) return
     this.collection.update(
       {name: channel},
@@ -44,8 +51,8 @@ class Channel {
   }
 
   addButton ({channel, id, name, src}, callback) {
+    log('Add button:', { channel, id, name, src })
     if (!channel) return
-    console.log('DB: ADD BUTTON', {channel, id, name, src})
     this.collection.update(
       {name: channel},
       {
@@ -57,8 +64,8 @@ class Channel {
   }
 
   removeButton ({channel, id}, callback) {
+    log('Remove button:', { channel, id })
     if (!channel) return
-    console.log('DB: REMOVE BUTTON', {channel, id})
     this.collection.update(
       {name: channel},
       {
@@ -71,6 +78,7 @@ class Channel {
   }
 
   getButton ({channel, buttonId}, callback) {
+    log('Get button:', { channel, buttonId })
     if (!channel || !buttonId) return
 
     this.collection.findOne(
@@ -85,6 +93,7 @@ class Channel {
   }
 
   getButtonByName ({channel, buttonName}, callback) {
+    log('Get button by name:', { channel, buttonName })
     if (!channel || !buttonName) return
 
     this.collection.findOne(
@@ -99,6 +108,7 @@ class Channel {
   }
 
   getRandomButton (name, callback) {
+    log(`Get random button on channel: ${name}`)
     this.collection.aggregate([
       { $match: { name } },
       { $unwind: "$buttons" },
