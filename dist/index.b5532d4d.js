@@ -456,6 +456,15 @@ require('../css/style.css');
 require('../css/animations.css');
 require('../css/button.css');
 require('../css/colors.css');
+const API_URL_MAP = {
+  localhost: 'http://localhost:3000',
+  'instabuddy.herokuapp.com': 'instabuddy.herokuapp.com',
+  default: 'instabuddy.herokuapp.com'
+};
+const API_URL = API_URL_MAP[window.location.hostname] || API_URL_MAP.default;
+log({
+  API_URL
+});
 class App {
   constructor(mode) {
     this.$buttons = new _elDefault.default('#buttons');
@@ -668,8 +677,13 @@ class App {
     }, this.recordingTime);
   }
   sendBinary(buffer, {id, name, channel}) {
+    log('sendBinary', {
+      id,
+      name,
+      channel
+    });
     const xhr = new XMLHttpRequest();
-    const url = `/binary/${channel}/${id}/${name}`;
+    const url = `${API_URL}/binary/${channel}/${id}/${name}`;
     xhr.open('POST', url, true);
     xhr.send(buffer);
   }
@@ -4732,6 +4746,8 @@ exports.export = function (dest, destName, get) {
 },{}],"49gRO":[function(require,module,exports) {
 var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
 _parcelHelpers.defineInteropFlag(exports);
+var _el = require('./el');
+var _elDefault = _parcelHelpers.interopDefault(_el);
 class InstabuddyEvents {
   constructor(app) {
     this.app = app;
@@ -4768,7 +4784,7 @@ class InstabuddyEvents {
     if (this.app.channel !== channel) return;
     // Don't interrupt recording nor playback.
     if (this.app.playing || this.app.recording) return;
-    const $el = new El(`#btn-${id}`);
+    const $el = new _elDefault.default(`#btn-${id}`);
     if (!$el.exists()) return;
     this.app.$audio.src = src;
     this.app.$audio.play();
@@ -4781,6 +4797,6 @@ class InstabuddyEvents {
 }
 exports.default = InstabuddyEvents;
 
-},{"@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"4YWIn":[function() {},{}],"4ij1f":[function() {},{}],"6XyAJ":[function() {},{}],"6Z0nh":[function() {},{}]},["4dmWh","47Twn"], "47Twn", "parcelRequire3f38")
+},{"./el":"3Y1ws","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"4YWIn":[function() {},{}],"4ij1f":[function() {},{}],"6XyAJ":[function() {},{}],"6Z0nh":[function() {},{}]},["4dmWh","47Twn"], "47Twn", "parcelRequire3f38")
 
 //# sourceMappingURL=index.b5532d4d.js.map

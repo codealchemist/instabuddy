@@ -2,11 +2,15 @@ const mkdirp = require('mkdirp')
 const storage = require('./storage')
 const channelModel = require('./models/channel')
 
+function log () {
+  console.log('[ StorageAdapter ]', ...arguments)
+}
+
 function upload (req, data) {
   bufferify(req, (buffer) => {
     const id = `${data.channel}-${data.id}.webm`
     storage.upload({buffer, id}, (result) => {
-      console.log('STORAGE UPLOAD, result:', result)
+      log('Upload, result:', result)
 
       // Add storage src.
       data.src = result.secure_url
@@ -32,7 +36,7 @@ function saveBinary (req, audioPath, data) {
   // Ensure path exists.
   mkdirp(filePath, (err) => {
     if (err) {
-      console.log(`ERROR: UNABLE TO SAVE FILE: '${file}'`, err)
+      log(`ERROR: Unable to save file: '${file}'`, err)
       return
     }
 
@@ -44,7 +48,7 @@ function saveBinary (req, audioPath, data) {
     req.on('end', () => {
       fileWriter.write(buffer)
       fileWriter.end()
-      console.log('SAVE BINARY: File written OK:', file)
+      log('Save binary data: file written OK:', file)
 
       data.src = `/audio/${data.channel}/${data.id}.webm`
       saveDb(data)
@@ -55,7 +59,7 @@ function saveBinary (req, audioPath, data) {
 // Save new button in db.
 function saveDb (data) {
   channelModel.addButton(data, (err, response) => {
-    console.log('DB: Saved OK!', response)
+    log('DB: Saved OK!', response)
   })
 }
 

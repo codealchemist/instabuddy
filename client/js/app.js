@@ -7,6 +7,14 @@ import '../css/animations.css'
 import '../css/button.css'
 import '../css/colors.css'
 
+const API_URL_MAP = {
+  localhost: 'http://localhost:3000',
+  'instabuddy.herokuapp.com': 'instabuddy.herokuapp.com',
+  default: 'instabuddy.herokuapp.com'
+}
+const API_URL = API_URL_MAP[window.location.hostname] || API_URL_MAP.default
+log({ API_URL })
+
 class App {
   constructor (mode) {
     this.$buttons = new El('#buttons')
@@ -212,7 +220,7 @@ class App {
   }
 
   getChannel () {
-    log('Get channel...')
+    log('Get channel...', { channel: this.channel })
     this.send({ type: 'getChannel', name: this.channel })
   }
 
@@ -269,8 +277,9 @@ class App {
   }
 
   sendBinary (buffer, { id, name, channel }) {
+    log('sendBinary', { id, name, channel })
     const xhr = new XMLHttpRequest()
-    const url = `/binary/${channel}/${id}/${name}`
+    const url = `${API_URL}/binary/${channel}/${id}/${name}`
     xhr.open('POST', url, true)
     xhr.send(buffer)
   }
