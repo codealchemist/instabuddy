@@ -36,7 +36,7 @@
     "body-parser": "^1.18.2",
     "cloudinary": "^1.9.0",
     "dotenv": "^8.2.0",
-    "ejs": "^2.5.7",
+    "ejs": "^3.1.7",
     "express": "^4.15.4",
     "https-enforcer": "^1.0.0",
     "mkdirp": "^0.5.1",
