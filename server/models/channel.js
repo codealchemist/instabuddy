@@ -14,9 +14,14 @@ class Channel {
     return getDb().collection('channels');
   }
 
-  list () {
-    // This method was empty, can be implemented if needed
-    // Example: return this._getCollection().find({}).toArray();
+  async list () {
+    log('List all channels');
+    try {
+      return await this._getCollection().find({}).toArray();
+    } catch (error) {
+      log('Error listing channels:', error);
+      throw error; // Re-throw the error to be handled by the caller
+    }
   }
 
   async get (name) {
