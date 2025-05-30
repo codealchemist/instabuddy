@@ -10,7 +10,7 @@ class InstabuddyConnector {
 
     this.interval = setInterval(() => {
       // console.log(`--- WebSocket.readyState: ${this.ws.readyState} / open: ${this.ws.OPEN}`)
-      if (this.ws.readyState !== this.ws.OPEN) {
+      if (this.ws && this.ws.readyState !== this.ws.OPEN) { // Check if this.ws exists
         if (!this.ready) return
         this.log('Closed.')
         this.log('Reconnect...')

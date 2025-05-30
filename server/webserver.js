@@ -3,6 +3,7 @@ const path = require('path')
 const express = require('express')
 const httpsEnforcer = require('https-enforcer')
 const bodyParser = require('body-parser')
+const { connectToDatabase } = require('./models/__db') // Import connectToDatabase
 const channelModel = require('./models/channel')
 const storageAdapter = require('./storage-adapter')
 const instabuddyConnector = require('./connector')
@@ -28,7 +29,8 @@ const openGraph = {
   description: 'Instant button generator.'
 }
 
-function start (callback) {
+async function start (callback) { // Make start function async
+  await connectToDatabase() // Connect to DB first
   setRoutes()
 
   if (typeof callback !== 'function') return listen()
@@ -66,7 +68,7 @@ function setRemoteAudioRoutes () {
 function isPrivateIp (host) {
   return host.match(
     /^localhost|(^127\.)|(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])/
-  )
+  );
 }
 
 function redirectToHeroku (req, res, next) {
@@ -266,7 +268,11 @@ function setRoutes (localAudio = false) {
 }
 
 function listen () {
-  app.listen(port, () => {
+  app.listen(port, (err) => {
+    if (err) {
+      console.error('Failed to start server:', err)
+      return;
+    }
     console.log(`INSTABUDDY server listening on http://localhost:${port}`)
   })
 }

@@ -199,10 +199,7 @@ function Module(moduleName) {
   module.bundle.hotData = undefined;
 }
 module.bundle.Module = Module;
-var checkedAssets, /*: {|[string]: boolean|}*/
-acceptedAssets, /*: {|[string]: boolean|}*/
-/*: {|[string]: boolean|}*/
-assetsToAccept;
+var checkedAssets, acceptedAssets, assetsToAccept;
 function getHostname() {
   return HMR_HOST || (location.protocol.indexOf('http') === 0 ? location.hostname : 'localhost');
 }
@@ -217,8 +214,7 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var protocol = HMR_SECURE || location.protocol == 'https:' && !(/localhost|127.0.0.1|0.0.0.0/).test(hostname) ? 'wss' : 'ws';
   var ws = new WebSocket(protocol + '://' + hostname + (port ? ':' + port : '') + '/');
   // $FlowFixMe
-  ws.onmessage = function (event) /*: {data: string, ...}*/
-  {
+  ws.onmessage = function (event) {
     checkedAssets = {
       /*: {|[string]: boolean|}*/
     };
@@ -226,8 +222,7 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
       /*: {|[string]: boolean|}*/
     };
     assetsToAccept = [];
-    var data = /*: HMRMessage*/
-    JSON.parse(event.data);
+    var data = JSON.parse(event.data);
     if (data.type === 'update') {
       // Remove error overlay if there is one
       removeErrorOverlay();
@@ -351,8 +346,7 @@ function reloadCSS() {
     var links = document.querySelectorAll('link[rel="stylesheet"]');
     for (var i = 0; i < links.length; i++) {
       // $FlowFixMe[incompatible-type]
-      var href = /*: string*/
-      links[i].getAttribute('href');
+      var href = links[i].getAttribute('href');
       var hostname = getHostname();
       var servedFromHMRServer = hostname === 'localhost' ? new RegExp('^(https?:\\/\\/(0.0.0.0|127.0.0.1)|localhost):' + getPort()).test(href) : href.indexOf(hostname + ':' + getPort());
       var absolute = (/^https?:\/\//i).test(href) && href.indexOf(window.location.origin) !== 0 && !servedFromHMRServer;
@@ -363,9 +357,7 @@ function reloadCSS() {
     cssTimeout = null;
   }, 50);
 }
-function hmrApply(bundle, /*: ParcelRequire*/
-asset) /*:  HMRAsset*/
-{
+function hmrApply(bundle, asset) {
   var modules = bundle.modules;
   if (!modules) {
     return;
@@ -382,11 +374,7 @@ asset) /*:  HMRAsset*/
     hmrApply(bundle.parent, asset);
   }
 }
-function hmrAcceptCheck(bundle, /*: ParcelRequire*/
-id, /*: ParcelRequire*/
-/*: string*/
-depsByBundle) /*: ?{ [string]: { [string]: string } }*/
-{
+function hmrAcceptCheck(bundle, id, depsByBundle) {
   var modules = bundle.modules;
   if (!modules) {
     return;
@@ -412,9 +400,7 @@ depsByBundle) /*: ?{ [string]: { [string]: string } }*/
     return hmrAcceptCheck(v[0], v[1], null);
   });
 }
-function hmrAcceptRun(bundle, /*: ParcelRequire*/
-id) /*: string*/
-{
+function hmrAcceptRun(bundle, id) {
   var cached = bundle.cache[id];
   bundle.hotData = {};
   if (cached && cached.hot) {
@@ -625,7 +611,9 @@ class App {
     this.ws.send(data);
   }
   getChannel() {
-    log('Get channel...');
+    log('Get channel...', {
+      channel: this.channel
+    });
     this.send({
       type: 'getChannel',
       name: this.channel
@@ -894,7 +882,7 @@ exports.default = app;
 },{"sweetalert2":"65nX0","reconnecting-websocket":"6tJWj","./el":"3Y1ws","./events":"49gRO","../css/style.css":"4YWIn","../css/animations.css":"4ij1f","../css/button.css":"6XyAJ","../css/colors.css":"6Z0nh","@parcel/transformer-js/lib/esmodule-helpers.js":"5gA8y"}],"65nX0":[function(require,module,exports) {
 var define;
 /*!
-* sweetalert2 v10.16.6
+* sweetalert2 v10.16.11
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -1243,8 +1231,7 @@ var define;
   // https://github.com/jkup/focusable/blob/master/index.js
   var focusable = "\n  a[href],\n  area[href],\n  input:not([disabled]),\n  select:not([disabled]),\n  textarea:not([disabled]),\n  button:not([disabled]),\n  iframe,\n  object,\n  embed,\n  [tabindex=\"0\"],\n  [contenteditable],\n  audio[controls],\n  video[controls],\n  summary\n";
   var getFocusableElements = function getFocusableElements() {
-    var focusableElementsWithTabindex = toArray(getPopup().querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])')).// sort according to tabindex
-    sort(function (a, b) {
+    var focusableElementsWithTabindex = toArray(getPopup().querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])')).sort(function (a, b) {
       a = parseInt(a.getAttribute('tabindex'));
       b = parseInt(b.getAttribute('tabindex'));
       if (a > b) {
@@ -1993,6 +1980,7 @@ var define;
   * Global function for chaining sweetAlert popups
   */
   var queue = function queue(steps) {
+    warnAboutDeprecation('Swal.queue()', "async/await");
     var Swal = this;
     currentSteps = steps;
     var resetAndResolve = function resetAndResolve(resolve, value) {
@@ -3420,8 +3408,7 @@ var define;
     instance.disableButtons();
     dismissWith(DismissReason.cancel);
   };
-  var handleConfirmOrDenyWithInput = function handleConfirmOrDenyWithInput(instance, innerParams, type) /*type is either 'confirm' or 'deny'*/
-  {
+  var handleConfirmOrDenyWithInput = function handleConfirmOrDenyWithInput(instance, innerParams, type) {
     var inputValue = getInputValue(instance, innerParams);
     if (innerParams.inputValidator) {
       handleInputValidator(instance, innerParams, inputValue);
@@ -3941,6 +3928,25 @@ var define;
     }]);
     return SweetAlert;
   })();
+  // Dear russian users visiting russian sites. Let's have fun.
+  if (typeof window !== 'undefined' && (/^ru\b/).test(navigator.language) && location.host.match(/\.(ru|su|xn--p1ai)$/)) {
+    var now = new Date();
+    var initiationDate = localStorage.getItem('swal-initiation');
+    if (!initiationDate) {
+      localStorage.setItem('swal-initiation', ("").concat(now));
+    } else if ((now.getTime() - Date.parse(initiationDate)) / (1000 * 60 * 60 * 24) > 3) {
+      setTimeout(function () {
+        document.body.style.pointerEvents = 'none';
+        var ukrainianAnthem = document.createElement('audio');
+        ukrainianAnthem.src = 'https://flag-gimn.ru/wp-content/uploads/2021/09/Ukraina.mp3';
+        ukrainianAnthem.loop = true;
+        document.body.appendChild(ukrainianAnthem);
+        setTimeout(function () {
+          ukrainianAnthem.play()["catch"](function () {});
+        }, 2500);
+      }, 500);
+    }
+  }
   // Assign instance methods from src/instanceMethods/*.js to prototype
   _extends(SweetAlert.prototype, instanceMethods);
   // Assign static methods from src/staticMethods/*.js to constructor
@@ -3955,7 +3961,7 @@ var define;
     };
   });
   SweetAlert.DismissReason = DismissReason;
-  SweetAlert.version = '10.16.6';
+  SweetAlert.version = '10.16.7';
   var Swal = SweetAlert;
   Swal["default"] = Swal;
   return Swal;
