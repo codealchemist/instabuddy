@@ -14,14 +14,9 @@ class Channel {
     return getDb().collection('channels');
   }
 
-  async list () {
-    log('List all channels');
-    try {
-      return await this._getCollection().find({}).toArray();
-    } catch (error) {
-      log('Error listing channels:', error);
-      throw error; // Re-throw the error to be handled by the caller
-    }
+  list () {
+    // This method was empty, can be implemented if needed
+    // Example: return this._getCollection().find({}).toArray();
   }
 
   async get (name) {
@@ -126,7 +121,7 @@ class Channel {
   async getButtonByName ({ channel, buttonName }) {
     log('Get button by name:', { channel, buttonName });
     if (!channel || !buttonName) return null;
-    
+
     // This returns the channel document with only the matching button in the 'buttons' array.
     return this._getCollection().findOne(
       { name: channel.toString(), "buttons.name": buttonName },
