@@ -1,0 +1,10 @@
+
+> instabuddy@1.10.0 client
+> parcel client/index.html
+
+Port "1234" could not be used
+Building...
+Bundling...
+Packaging & Optimizing...
+Server running at http://localhost:37683
+✨ Built in 764ms

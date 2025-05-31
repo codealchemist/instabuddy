@@ -26,9 +26,10 @@
     "url": "https://github.com/codealchemist/instabuddy/issues"
   },
   "homepage": "https://github.com/codealchemist/instabuddy#readme",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "devDependencies": {
-    "nodemon": "^2.0.20",
-    "parcel": "2.0.0-beta.2",
+    "nodemon": "^3.1.10",
+    "parcel": "^2.15.2",
     "standard-focus": "^1.1.2"
   },
   "dependencies": {
@@ -37,11 +38,10 @@
     "cloudinary": "^1.9.0",
     "dotenv": "^8.2.0",
     "ejs": "^2.5.7",
-    "express": "^4.15.4",
+    "express": "^5.1.0",
     "https-enforcer": "^1.0.0",
-    "mkdirp": "^0.5.1",
-    "mongodb": "^3.6.6",
-    "mongojs": "^3.1.0",
+    "mkdirp": "^3.0.1",
+    "mongodb": "^6.16.0",
     "reconnecting-websocket": "^4.4.0",
     "sweetalert2": "^10.16.6",
     "ws": "^3.1.0"
