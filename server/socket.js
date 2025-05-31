@@ -38,25 +38,25 @@ function startWithApp (app, callback) {
 
 function setEvents () {
   console.log('set socket events')
-  wss.on('connection', ws => {
+  wss.on('connection', (ws) => {
     log('NEW client')
 
     // Handle errors on this specific client connection
-    ws.on('error', error => {
+    ws.on('error', (error) => {
       // Using console.error as per subtask example for error logging
-      console.error('WebSocket error on client:', error)
-    })
+      console.error('WebSocket error on client:', error);
+    });
 
     // Handle client disconnection
     ws.on('close', () => {
-      log('WebSocket client disconnected')
-    })
+      log('WebSocket client disconnected');
+    });
 
-    ws.on('message', data => {
+    ws.on('message', (data) => {
       const message = JSON.parse(data)
-      log('MSG:', message)
+      // log('MSG:', message)
       if (typeof events[message.type] === 'function') {
-        events[message.type]({ broadcast, send, ws, message })
+        events[message.type]({broadcast, send, ws, message})
       }
     })
   })
@@ -64,10 +64,10 @@ function setEvents () {
 
 function broadcast (ws, message) {
   const data = JSON.stringify(message)
-  wss.clients.forEach(client => {
+  wss.clients.forEach((client) => {
     if (client === ws) return
     if (client.readyState !== WebSocket.OPEN) return
-    client.send(data, error => {}) // eslint-disable-line
+    client.send(data, (error) => {}) // eslint-disable-line
   })
 }
 
@@ -75,11 +75,11 @@ function send (ws, message) {
   // console.log('SEND:', message)
   const data = JSON.stringify(message)
   if (ws.readyState !== WebSocket.OPEN) return
-  ws.send(data, error => {}) // eslint-disable-line
+  ws.send(data, (error) => {}) // eslint-disable-line
 }
 
 function log () {
-  const ts = new Date().toISOString()
+  const ts = (new Date()).toISOString()
   console.log(`${ts}:`, ...arguments)
 }
 
