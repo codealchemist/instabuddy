@@ -268,13 +268,13 @@ function setRoutes (localAudio = false) {
 }
 
 function listen () {
-  app.listen(port, (err) => {
-    if (err) {
-      console.error('Failed to start server:', err)
-      return;
-    }
+  const server = app.listen(port, () => {
     console.log(`INSTABUDDY server listening on http://localhost:${port}`)
-  })
+  });
+
+  server.on('error', (err) => {
+    console.error('Failed to start server:', err);
+  });
 }
 
 module.exports = { start }
