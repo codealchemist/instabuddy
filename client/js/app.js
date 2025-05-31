@@ -9,16 +9,16 @@ import '../css/colors.css'
 
 const API_URL_MAP = {
   localhost: 'http://localhost:3000',
-  'instabuddy.herokuapp.com': 'instabuddy.herokuapp.com',
-  default: 'instabuddy.herokuapp.com'
+  'instabuddy-five.vercel.app': 'instabuddy-five.vercel.app',
+  default: 'instabuddy-five.vercel.app'
 }
 const API_URL = API_URL_MAP[window.location.hostname] || API_URL_MAP.default
 log({ API_URL })
 
 const WS_URL_MAP = {
   localhost: 'ws://localhost:3000',
-  'instabuddy.herokuapp.com': 'wss://instabuddy.herokuapp.com',
-  default: 'wss://instabuddy.herokuapp.com'
+  'instabuddy-five.vercel.app': 'wss://instabuddy-five.vercel.app',
+  default: 'wss://instabuddy-five.vercel.app'
 }
 const WS_URL = WS_URL_MAP[window.location.hostname] || WS_URL_MAP.default
 log({ WS_URL })
