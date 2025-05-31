@@ -160,11 +160,11 @@
       });
     }
   }
-})({"hVlA1":[function(require,module,exports,__globalThis) {
+})({"jflPi":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 34611;
+var HMR_SERVER_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -690,6 +690,15 @@ const API_URL = API_URL_MAP[window.location.hostname] || API_URL_MAP.default;
 log({
     API_URL
 });
+const WS_URL_MAP = {
+    localhost: 'ws://localhost:3000',
+    'instabuddy.herokuapp.com': 'wss://instabuddy.herokuapp.com',
+    default: 'wss://instabuddy.herokuapp.com'
+};
+const WS_URL = WS_URL_MAP[window.location.hostname] || WS_URL_MAP.default;
+log({
+    WS_URL
+});
 class App {
     constructor(mode1){
         this.$buttons = new (0, _elDefault.default)('#buttons');
@@ -821,12 +830,7 @@ class App {
             alert(this.messages.noWebSocketSupport);
             return;
         }
-        let wsProto = 'ws';
-        if (location.protocol === 'https:') wsProto = 'wss';
-        // const wsUrl = `${wsProto}://${location.host}`
-        const wsUrl = `wss://instabuddy.herokuapp.com`;
-        log('WS URL:', wsUrl);
-        this.ws = new (0, _reconnectingWebsocketDefault.default)(wsUrl);
+        this.ws = new (0, _reconnectingWebsocketDefault.default)(WS_URL);
         this.ws.binaryType = 'arraybuffer';
         this.ws.onopen = ()=>{
             if (this.connected) {
@@ -4703,6 +4707,6 @@ class InstabuddyEvents {
 }
 exports.default = InstabuddyEvents;
 
-},{"./el":"7j6yA","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"3Hcnq":[function() {},{}],"3VoyK":[function() {},{}],"8zFG3":[function() {},{}],"fDupZ":[function() {},{}]},["hVlA1","eAF5h"], "eAF5h", "parcelRequire60a8", {})
+},{"./el":"7j6yA","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"3Hcnq":[function() {},{}],"3VoyK":[function() {},{}],"8zFG3":[function() {},{}],"fDupZ":[function() {},{}]},["jflPi","eAF5h"], "eAF5h", "parcelRequire60a8", {})
 
 //# sourceMappingURL=client.cd512f39.js.map
