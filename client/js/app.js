@@ -15,6 +15,14 @@ const API_URL_MAP = {
 const API_URL = API_URL_MAP[window.location.hostname] || API_URL_MAP.default
 log({ API_URL })
 
+const WS_URL_MAP = {
+  localhost: 'ws://localhost:3000',
+  'instabuddy.herokuapp.com': 'wss://instabuddy.herokuapp.com',
+  default: 'wss://instabuddy.herokuapp.com'
+}
+const WS_URL = WS_URL_MAP[window.location.hostname] || WS_URL_MAP.default
+log({ WS_URL })
+
 class App {
   constructor (mode) {
     this.$buttons = new El('#buttons')
@@ -183,12 +191,7 @@ class App {
       return
     }
 
-    let wsProto = 'ws'
-    if (location.protocol === 'https:') wsProto = 'wss'
-    // const wsUrl = `${wsProto}://${location.host}`
-    const wsUrl = `wss://instabuddy.herokuapp.com`
-    log('WS URL:', wsUrl)
-    this.ws = new ReconnectingWebSocket(wsUrl)
+    this.ws = new ReconnectingWebSocket(WS_URL)
     this.ws.binaryType = 'arraybuffer'
 
     this.ws.onopen = () => {
