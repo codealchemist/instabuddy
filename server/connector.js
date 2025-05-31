@@ -1,7 +1,7 @@
 const WebSocket = require('ws')
 
 let url = 'ws://localhost:3000'
-if (process.env.ENV === 'prod') url = 'wss://instabuddy.herokuapp.com'
+if (process.env.ENV === 'prod') url = 'wss://instabuddy-five.vercel.app'
 
 class InstabuddyConnector {
   constructor () {
@@ -10,7 +10,8 @@ class InstabuddyConnector {
 
     this.interval = setInterval(() => {
       // console.log(`--- WebSocket.readyState: ${this.ws.readyState} / open: ${this.ws.OPEN}`)
-      if (this.ws && this.ws.readyState !== this.ws.OPEN) { // Check if this.ws exists
+      if (this.ws && this.ws.readyState !== this.ws.OPEN) {
+        // Check if this.ws exists
         if (!this.ready) return
         this.log('Closed.')
         this.log('Reconnect...')
@@ -45,16 +46,16 @@ class InstabuddyConnector {
     return this
   }
 
-  play ({channel, id, src}) {
+  play ({ channel, id, src }) {
     if (!this.ready) {
       this.log('Delayed playback, waiting for WS to connect...')
       setTimeout(() => {
-        this.play({channel, id, src})
+        this.play({ channel, id, src })
       }, 250)
       return
     }
 
-    this.log('Play:', {channel, id, src})
+    this.log('Play:', { channel, id, src })
     const message = {
       type: 'play',
       data: { channel, id, src }

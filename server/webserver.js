@@ -22,14 +22,15 @@ console.log('- envPath', envPath)
 // open graph defaults
 const openGraph = {
   username: '@albertomiranda',
-  image: 'https://instabuddy.herokuapp.com/android-chrome-256x256.png',
-  proxiedImage: 'https://instabuddy.herokuapp.com/android-chrome-256x256.png',
+  image: 'https://instabuddy-five.vercel.app/android-chrome-256x256.png',
+  proxiedImage: 'https://instabuddy-five.vercel.app/android-chrome-256x256.png',
   title: 'InstaBuddy',
-  url: 'https://instabuddy.herokuapp.com',
+  url: 'https://instabuddy-five.vercel.app',
   description: 'Instant button generator.'
 }
 
-async function start (callback) { // Make start function async
+async function start (callback) {
+  // Make start function async
   await connectToDatabase() // Connect to DB first
   setRoutes()
 
@@ -68,13 +69,13 @@ function setRemoteAudioRoutes () {
 function isPrivateIp (host) {
   return host.match(
     /^localhost|(^127\.)|(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])/
-  );
+  )
 }
 
 function redirectToHeroku (req, res, next) {
   const host = req.get('host')
-  if (host !== 'instabuddy.herokuapp.com' && !isPrivateIp(host)) {
-    res.redirect(`https://instabuddy.herokuapp.com${req.path}`)
+  if (host !== 'instabuddy-five.vercel.app' && !isPrivateIp(host)) {
+    res.redirect(`https://instabuddy-five.vercel.app${req.path}`)
     return
   }
 
@@ -268,10 +269,10 @@ function setRoutes (localAudio = false) {
 }
 
 function listen () {
-  app.listen(port, (err) => {
+  app.listen(port, err => {
     if (err) {
       console.error('Failed to start server:', err)
-      return;
+      return
     }
     console.log(`INSTABUDDY server listening on http://localhost:${port}`)
   })
