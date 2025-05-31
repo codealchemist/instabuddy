@@ -41,6 +41,17 @@ function setEvents () {
   wss.on('connection', ws => {
     log('NEW client')
 
+    // Handle errors on this specific client connection
+    ws.on('error', error => {
+      // Using console.error as per subtask example for error logging
+      console.error('WebSocket error on client:', error)
+    })
+
+    // Handle client disconnection
+    ws.on('close', () => {
+      log('WebSocket client disconnected')
+    })
+
     ws.on('message', data => {
       const message = JSON.parse(data)
       log('MSG:', message)
